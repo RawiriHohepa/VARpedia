@@ -1,17 +1,20 @@
 package application.controller;
 
+import application.BackgroundMusicPlayer;
 import application.Main;
 import application.logic.AlertBuilder;
+import application.logic.FileManager;
 import application.logic.Quiz;
+import application.logic.VideoPlayer;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -54,10 +57,16 @@ public class QuizController {
     private ImageView _quizImage;
 
     private Quiz _quiz;
+    private BackgroundMusicPlayer _backgroundMusicPlayer;
+    private VideoPlayer _videoPlayer;
+    private FileManager _fileManager;
 
     @FXML
     public void initialize() {
         _quiz = new Quiz();
+        _backgroundMusicPlayer = Main.backgroundMusicPlayer();
+        _videoPlayer = new VideoPlayer();
+        _fileManager = new FileManager();
 
         _currentScoreText.setText("   Current Score: " + _quiz.getCurrentScore());
         _quizPlayer.setVisible(false);
@@ -66,10 +75,7 @@ public class QuizController {
         _deleteButton.disableProperty().bind(noCreationSelected);
 
         updateButtonTexts();
-
-        boolean buttonIsSelected = _quiz.backgroundMusicButtonIsSelected();
-        _backgroundMusicButton.setSelected(buttonIsSelected);
-        _backgroundMusicButtonInPlayer.setSelected(buttonIsSelected);
+        setButtonsSelected();
 
         _startButton.setVisible(true);
         _manageQuizButton.setVisible(true);
@@ -110,15 +116,14 @@ public class QuizController {
         _playerAnswerTextField.setVisible(true);
         _backgroundMusicButtonInPlayer.setVisible(true);
 
-        _quiz.selectRandomVideo();
-
-        _mediaView.setMediaPlayer(_quiz.createMediaPlayer());
-        _pausePlayButton.setText("| |");
+        MediaPlayer quizPlayer = _videoPlayer.createMediaPlayer(_quiz.selectRandomVideo());
+        _mediaView.setMediaPlayer(quizPlayer);
+        _pausePlayButton.setText(_videoPlayer.getButtonText());
     }
 
     @FXML
     private void handleCheckButton() {
-        _quiz.pauseMediaPlayer();
+        _videoPlayer.pauseMediaPlayer();
 
         AlertBuilder alertBuilder = new AlertBuilder()
                 .setAlertType(Alert.AlertType.INFORMATION)
@@ -140,22 +145,20 @@ public class QuizController {
                     .setContentText("Please try again.");
             alertBuilder.getResult().showAndWait();
 
-            _quiz.playMediaPlayer();
+            _videoPlayer.playMediaPlayer();
         }
     }
 
     @FXML
     private void handlePausePlayButton() {
-        String newButtonText = _quiz.pausePlayMedia();
-        _pausePlayButton.setText(newButtonText);
+        _videoPlayer.pausePlayMedia();
+        _pausePlayButton.setText(_videoPlayer.getButtonText());
     }
 
     // Return to main menu
     @FXML
     private void handleBackButton() throws IOException {
-        if (_quiz.mediaPlayerIsCreated()) {
-            _quiz.stopMediaPlayer();
-        }
+        _videoPlayer.stopMediaPlayer();
         Main.changeScene("resources/MainScreenScene.fxml");
     }
 
@@ -183,22 +186,14 @@ public class QuizController {
     @FXML
     public void handleSelectedQuiz() {
         String selectedQuiz = _listOfQuiz.getSelectionModel().getSelectedItem();
-        _quiz.setSelectedQuiz(selectedQuiz);
+        _fileManager.setSelectedQuiz(selectedQuiz);
         if (selectedQuiz != null) {
             selectPrompt.setText("");
         }
     }
 
     private void ListCurrentQuiz() {
-        _listOfQuiz.setItems(_quiz.getCurrentListOfQuiz());
-    }
-
-    public File getSelectedFile() {
-        return _quiz.getSelectedFile();
-    }
-
-    private String getSelectedQuizName() {
-        return _quiz.getSelectedQuizName();
+        _listOfQuiz.setItems(_fileManager.getCurrentListOfQuiz());
     }
 
     @FXML
@@ -206,13 +201,13 @@ public class QuizController {
         AlertBuilder alertBuilder = new AlertBuilder()
                 .setAlertType(Alert.AlertType.CONFIRMATION)
                 .setTitle("Confirm Deletion")
-                .setHeaderText("Delete " + getSelectedQuizName() + "?")
+                .setHeaderText("Delete " + _fileManager.getSelectedQuizName() + "?")
                 .setContentText("Are you sure you want to delete this quiz?");
         Alert deleteConfirmation = alertBuilder.getResult();
         Optional<ButtonType> buttonClicked = deleteConfirmation.showAndWait();
 
         if (buttonClicked.isPresent() && buttonClicked.get() == ButtonType.OK) {
-            _quiz.deleteSelectedFile();
+            _fileManager.deleteSelectedFile();
             ListCurrentQuiz();
 
             selectPrompt.setText("                               " +
@@ -229,7 +224,7 @@ public class QuizController {
     @FXML
     private void handleBackgroundMusic() {
         boolean buttonIsSelected = _backgroundMusicButton.isSelected();
-        Main.backgroundMusicPlayer().handleBackgroundMusic(buttonIsSelected);
+        _backgroundMusicPlayer.handleBackgroundMusic(buttonIsSelected);
         _backgroundMusicButtonInPlayer.setSelected(buttonIsSelected);
         updateButtonTexts();
     }
@@ -237,14 +232,20 @@ public class QuizController {
     @FXML
     private void handleBackgroundMusicInPlayer() {
         boolean buttonIsSelected = _backgroundMusicButtonInPlayer.isSelected();
-        Main.backgroundMusicPlayer().handleBackgroundMusic(buttonIsSelected);
+        _backgroundMusicPlayer.handleBackgroundMusic(buttonIsSelected);
         _backgroundMusicButton.setSelected(buttonIsSelected);
         updateButtonTexts();
     }
 
     private void updateButtonTexts() {
-        String buttonText = _quiz.getBackgroundMusicButtonText();
+        String buttonText = _backgroundMusicPlayer.getButtonText();
         _backgroundMusicButton.setText(buttonText);
         _backgroundMusicButtonInPlayer.setText(buttonText);
+    }
+
+    private void setButtonsSelected() {
+        boolean buttonIsSelected = _backgroundMusicPlayer.getButtonIsSelected();
+        _backgroundMusicButton.setSelected(buttonIsSelected);
+        _backgroundMusicButtonInPlayer.setSelected(buttonIsSelected);
     }
 }
