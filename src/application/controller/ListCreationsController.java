@@ -32,8 +32,8 @@ public class ListCreationsController {
     public void initialize() {
 
         Main.setCurrentScene("ListCreationScene");
-        _backgroundMusicButton.setText(Main.backgroundMusicPlayer().getButtonText());
-        _backgroundMusicButton.setSelected(Main.backgroundMusicPlayer().getButtonIsSelected());
+        _backgroundMusicButton.setText(Main.getBackgroundMusicPlayer().getButtonText());
+        _backgroundMusicButton.setSelected(Main.getBackgroundMusicPlayer().getButtonIsSelected());
 
         ListCurrentFiles();
 
@@ -126,7 +126,7 @@ public class ListCreationsController {
 
     @FXML
     private void handleBackgroundMusic() {
-        Main.backgroundMusicPlayer().handleBackgroundMusic(_backgroundMusicButton.isSelected());
-        _backgroundMusicButton.setText(Main.backgroundMusicPlayer().getButtonText());
+        Main.getBackgroundMusicPlayer().handleBackgroundMusic(_backgroundMusicButton.isSelected());
+        _backgroundMusicButton.setText(Main.getBackgroundMusicPlayer().getButtonText());
     }
 }

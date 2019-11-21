@@ -48,7 +48,7 @@ public class QuizController {
     @FXML
     private Button _backButton;
     @FXML
-    private Label selectPrompt;
+    private Label _selectPrompt;
     @FXML
     private Label _quizListLabel;
     @FXML
@@ -64,7 +64,7 @@ public class QuizController {
     @FXML
     public void initialize() {
         _quiz = new Quiz();
-        _backgroundMusicPlayer = Main.backgroundMusicPlayer();
+        _backgroundMusicPlayer = Main.getBackgroundMusicPlayer();
         _videoPlayer = new VideoPlayer();
         _fileManager = new FileManager();
 
@@ -171,7 +171,7 @@ public class QuizController {
     public void handleManageQuizButton() {
         _quizImage.setVisible(false);
 
-        selectPrompt.setVisible(true);
+        _selectPrompt.setVisible(true);
         _quizListLabel.setVisible(true);
 
         ListCurrentQuiz();
@@ -188,7 +188,7 @@ public class QuizController {
         String selectedQuiz = _listOfQuiz.getSelectionModel().getSelectedItem();
         _fileManager.setSelectedQuiz(selectedQuiz);
         if (selectedQuiz != null) {
-            selectPrompt.setText("");
+            _selectPrompt.setText("");
         }
     }
 
@@ -210,7 +210,7 @@ public class QuizController {
             _fileManager.deleteSelectedFile();
             ListCurrentQuiz();
 
-            selectPrompt.setText("                               " +
+            _selectPrompt.setText("                               " +
                     "Please select a quiz video to continue.");
         }
     }

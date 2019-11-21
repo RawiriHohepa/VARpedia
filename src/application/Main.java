@@ -97,7 +97,7 @@ public class Main extends Application {
 		return _currentScene;
 	}
 	
-	static public BackgroundMusicPlayer backgroundMusicPlayer() {
+	static public BackgroundMusicPlayer getBackgroundMusicPlayer() {
 		return _backgroundMusicPlayer;
 	}
 }

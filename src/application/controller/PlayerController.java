@@ -41,10 +41,10 @@ public class PlayerController {
         Main.setCurrentScene("PlayerScene");
 
         // Initialise the media player with a video as soon as scene is loaded.
-        String buttonText = Main.backgroundMusicPlayer().getButtonText();
+        String buttonText = Main.getBackgroundMusicPlayer().getButtonText();
         _backgroundMusicButton.setText(buttonText);
         _backgroundMusicButtonInPlayer.setText(buttonText);
-        boolean buttonIsSelected = Main.backgroundMusicPlayer().getButtonIsSelected();
+        boolean buttonIsSelected = Main.getBackgroundMusicPlayer().getButtonIsSelected();
         _backgroundMusicButton.setSelected(buttonIsSelected);
         _backgroundMusicButtonInPlayer.setSelected(buttonIsSelected);
 
@@ -110,7 +110,7 @@ public class PlayerController {
     @FXML
     private void handleBackgroundMusic() {
         boolean buttonIsSelected = _backgroundMusicButton.isSelected();
-        Main.backgroundMusicPlayer().handleBackgroundMusic(buttonIsSelected);
+        Main.getBackgroundMusicPlayer().handleBackgroundMusic(buttonIsSelected);
         _backgroundMusicButtonInPlayer.setSelected(buttonIsSelected);
         updateButtonTexts();
     }
@@ -118,13 +118,13 @@ public class PlayerController {
     @FXML
     private void handleBackgroundMusicInPlayer() {
         boolean buttonIsSelected = _backgroundMusicButtonInPlayer.isSelected();
-        Main.backgroundMusicPlayer().handleBackgroundMusic(buttonIsSelected);
+        Main.getBackgroundMusicPlayer().handleBackgroundMusic(buttonIsSelected);
         _backgroundMusicButton.setSelected(buttonIsSelected);
         updateButtonTexts();
     }
 
     private void updateButtonTexts() {
-        String buttonText = Main.backgroundMusicPlayer().getButtonText();
+        String buttonText = Main.getBackgroundMusicPlayer().getButtonText();
         _backgroundMusicButton.setText(buttonText);
         _backgroundMusicButtonInPlayer.setText(buttonText);
     }

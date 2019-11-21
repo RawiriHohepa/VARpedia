@@ -15,8 +15,8 @@ public class MainScreenController {
     @FXML
     public void initialize() {
         Main.setCurrentScene("MainScreenScene");
-        _backgroundMusicButton.setText(Main.backgroundMusicPlayer().getButtonText());
-        _backgroundMusicButton.setSelected(Main.backgroundMusicPlayer().getButtonIsSelected());
+        _backgroundMusicButton.setText(Main.getBackgroundMusicPlayer().getButtonText());
+        _backgroundMusicButton.setSelected(Main.getBackgroundMusicPlayer().getButtonIsSelected());
     }
 
     @FXML
@@ -46,8 +46,8 @@ public class MainScreenController {
 
     @FXML
     private void handleBackgroundMusic() {
-        Main.backgroundMusicPlayer().handleBackgroundMusic(_backgroundMusicButton.isSelected());
-        _backgroundMusicButton.setText(Main.backgroundMusicPlayer().getButtonText());
+        Main.getBackgroundMusicPlayer().handleBackgroundMusic(_backgroundMusicButton.isSelected());
+        _backgroundMusicButton.setText(Main.getBackgroundMusicPlayer().getButtonText());
     }
 
     @FXML

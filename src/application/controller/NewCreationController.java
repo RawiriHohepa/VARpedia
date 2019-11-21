@@ -86,8 +86,8 @@ public class NewCreationController {
         _searchImage.setVisible(true);
 
         Main.setCurrentScene("CreationScene");
-        _backgroundMusicButton.setText(Main.backgroundMusicPlayer().getButtonText());
-        _backgroundMusicButton.setSelected(Main.backgroundMusicPlayer().getButtonIsSelected());
+        _backgroundMusicButton.setText(Main.getBackgroundMusicPlayer().getButtonText());
+        _backgroundMusicButton.setSelected(Main.getBackgroundMusicPlayer().getButtonIsSelected());
 
         _selectedChunk = null;
 
@@ -433,7 +433,7 @@ public class NewCreationController {
 
     @FXML
     private void handleBackgroundMusic() throws IOException {
-        Main.backgroundMusicPlayer().handleBackgroundMusic(_backgroundMusicButton.isSelected());
-        _backgroundMusicButton.setText(Main.backgroundMusicPlayer().getButtonText());
+        Main.getBackgroundMusicPlayer().handleBackgroundMusic(_backgroundMusicButton.isSelected());
+        _backgroundMusicButton.setText(Main.getBackgroundMusicPlayer().getButtonText());
     }
 }

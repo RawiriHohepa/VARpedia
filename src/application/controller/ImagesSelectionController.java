@@ -100,8 +100,8 @@ public class ImagesSelectionController {
         _clockImage.setVisible(true);
         _progressPane.setVisible(true);
         Main.setCurrentScene("ImageSelectionScene");
-        _backgroundMusicButton.setText(Main.backgroundMusicPlayer().getButtonText());
-        _backgroundMusicButton.setSelected(Main.backgroundMusicPlayer().getButtonIsSelected());
+        _backgroundMusicButton.setText(Main.getBackgroundMusicPlayer().getButtonText());
+        _backgroundMusicButton.setSelected(Main.getBackgroundMusicPlayer().getButtonIsSelected());
 
         _searchTerm = NewCreationController.getSearchTerm();
         _imagesFolder = new File(CREATIONS_DIR + _searchTerm);
@@ -325,7 +325,7 @@ public class ImagesSelectionController {
 
     @FXML
     private void handleBackgroundMusic() {
-        Main.backgroundMusicPlayer().handleBackgroundMusic(_backgroundMusicButton.isSelected());
-        _backgroundMusicButton.setText(Main.backgroundMusicPlayer().getButtonText());
+        Main.getBackgroundMusicPlayer().handleBackgroundMusic(_backgroundMusicButton.isSelected());
+        _backgroundMusicButton.setText(Main.getBackgroundMusicPlayer().getButtonText());
     }
 }
