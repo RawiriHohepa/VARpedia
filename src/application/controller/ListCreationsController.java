@@ -56,17 +56,17 @@ public class ListCreationsController {
 
     @FXML
     private void handleNewCreationButton() throws IOException {
-        Main.changeScene(Scenes.NEW_CREATION_SCENE.getSceneDir());
+        Scenes.changeScene(Scenes.NEW_CREATION_SCENE);
     }
 
     @FXML
     private void handlePlayButton() throws IOException {
-        Main.changeScene("resources/PlayerScene.fxml");
+        Scenes.changeScene(Scenes.PLAYER_SCENE);
     }
 
     @FXML
     private void handleReturnButton() throws IOException {
-        Main.changeScene("resources/MainScreenScene.fxml");
+        Scenes.changeScene(Scenes.MAIN_SCREEN_SCENE);
     }
 
     @FXML

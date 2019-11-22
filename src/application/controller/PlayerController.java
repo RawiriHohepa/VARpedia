@@ -1,6 +1,7 @@
 package application.controller;
 
 import application.Main;
+import application.Scenes;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -104,7 +105,7 @@ public class PlayerController {
     private void handleReturnButton() throws IOException {
         _mediaPlayer.stop();
         _mediaPlayer.dispose();
-        Main.changeScene("resources/ListCreationsScene.fxml");
+        Scenes.changeScene(Scenes.LIST_CREATIONS_SCENE);
     }
 
     @FXML

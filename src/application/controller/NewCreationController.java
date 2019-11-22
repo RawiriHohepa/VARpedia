@@ -1,5 +1,6 @@
 package application.controller;
 
+import application.Scenes;
 import application.tasks.CombineChunksTask;
 import application.Main;
 import application.tasks.WikiSearchTask;
@@ -101,7 +102,7 @@ public class NewCreationController {
     @FXML
     private void handleCreationCancelButton() throws IOException {
         // Return to main menu
-        Main.changeScene("resources/MainScreenScene.fxml");
+        Scenes.changeScene(Scenes.MAIN_SCREEN_SCENE);
         cleanChunks();
     }
 
@@ -278,7 +279,7 @@ public class NewCreationController {
             @Override
             public void handle(WorkerStateEvent event) {
                 try {
-                    Main.changeScene("resources/ImagesSelectionScene.fxml");
+                    Scenes.changeScene(Scenes.IMAGES_SELECTION_SCENE);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

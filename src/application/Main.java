@@ -15,7 +15,6 @@ import application.controller.NewCreationController;
 
 public class Main extends Application {
 
-	static public Stage _primaryStage;
 	static private BackgroundMusicPlayer _backgroundMusicPlayer;
 	private static String _currentScene;
 
@@ -26,7 +25,8 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		_backgroundMusicPlayer = new BackgroundMusicPlayer();
-		
+		Scenes.setPrimaryStage(primaryStage);
+
 		String userDir = System.getProperty("user.dir");
 		
 		File creationsFolder = new File(userDir + "/creations");
@@ -38,9 +38,8 @@ public class Main extends Application {
 		if (!quizFolder.exists()) {
 			quizFolder.mkdirs();
 		}
-		
-		_primaryStage =  primaryStage;
-		Main.changeScene("resources/MainScreenScene.fxml");
+
+		Scenes.changeScene(Scenes.MAIN_SCREEN_SCENE);
 		
 		/**
 		 * Credit to anonymous classmate from peer review
@@ -48,16 +47,12 @@ public class Main extends Application {
 		 * (e.g. stageName.setOnCloseRequest(......))"
 		 */
 		// Cleanly exit application by closing all processes when the user exits
-		_primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 			@Override
 			public void handle(WindowEvent event) {
 				System.exit(0);
 			}
 		});
-	}
-
-	static public void changeScene(String fxmlFileName) throws IOException {
-		Scenes.changeScene(fxmlFileName);
 	}
 	
 	// This method will clean the temporary fold that stored the audio chunks, the flikr images
@@ -85,7 +80,6 @@ public class Main extends Application {
 	}
 
 	static public String getCurrentScene(){
-
 		return _currentScene;
 	}
 	

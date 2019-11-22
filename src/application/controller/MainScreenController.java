@@ -1,6 +1,7 @@
 package application.controller;
 
 import application.Main;
+import application.Scenes;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ToggleButton;
@@ -21,19 +22,19 @@ public class MainScreenController {
 
     @FXML
     private void handleListButton() throws IOException {
-        Main.changeScene("resources/ListCreationsScene.fxml");
+        Scenes.changeScene(Scenes.LIST_CREATIONS_SCENE);
     }
 
     @FXML
     private void handleNewCreationButton() throws IOException {
-        Main.changeScene("resources/NewCreationScene.fxml");
+        Scenes.changeScene(Scenes.NEW_CREATION_SCENE);
     }
 
     @FXML
     private void handleQuizButton() throws IOException {
         File quizFolder = new File(System.getProperty("user.dir") + "/quiz/");
         if (!(quizFolder.listFiles().length == 0)) {
-            Main.changeScene("resources/QuizScene.fxml");
+            Scenes.changeScene(Scenes.QUIZ_SCENE);
         } else {
             Alert noQuizVideoAlert = new Alert(Alert.AlertType.WARNING);
             noQuizVideoAlert.getDialogPane().getStylesheets().add(("Alert.css"));

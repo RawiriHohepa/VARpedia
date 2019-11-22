@@ -1,5 +1,6 @@
 package application.controller;
 
+import application.Scenes;
 import application.tasks.FlickrImagesTask;
 import application.Main;
 import application.tasks.ImageVideoTask;
@@ -197,7 +198,7 @@ public class ImagesSelectionController {
 
         // return to main menu
         try {
-            Main.changeScene("resources/MainScreenScene.fxml");
+            Scenes.changeScene(Scenes.MAIN_SCREEN_SCENE);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -214,7 +215,7 @@ public class ImagesSelectionController {
                 // refresh the list of creations.
                 if (Main.getCurrentScene().equals("ListCreationScene")) {
                     try {
-                        Main.changeScene("resources/ListCreationsScene.fxml");
+                        Scenes.changeScene(Scenes.LIST_CREATIONS_SCENE);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -318,7 +319,7 @@ public class ImagesSelectionController {
     @FXML
     private void handleCreationCancelButton() throws IOException {
         // Return to main menu
-        Main.changeScene("resources/MainScreenScene.fxml");
+        Scenes.changeScene(Scenes.MAIN_SCREEN_SCENE);
         Main.cleanFolders();
     }
 

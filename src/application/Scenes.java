@@ -16,27 +16,26 @@ public enum Scenes {
     QUIZ_SCENE ("QuizScene");
 
     private final static String SCENES_FOLDER = "resources/";
+    private static Stage _primaryStage;
 
-    private final String dir;
-    Scenes(String fxmlName) {
-        dir = SCENES_FOLDER + fxmlName + ".fxml";
-    }
-
-    public String getSceneDir() {
-        return dir;
+    private final String _fxmlFileName;
+    Scenes(String sceneName) {
+        _fxmlFileName = SCENES_FOLDER + sceneName + ".fxml";
     }
 
     // This method is used throughout this application to change between scenes.
     // Upon the correct button actions by the user, the scene will switch to the next scene indicated by
     // the parameter String fxmlFileName.
-    static public void changeScene(String fxmlFileName) throws IOException {
-        Stage _primaryStage = Main._primaryStage;
-
+    static public void changeScene(Scenes scene) throws IOException {
         FXMLLoader fMXLLoader = new FXMLLoader();
-        fMXLLoader.setLocation(Main.class.getResource(fxmlFileName));
+        fMXLLoader.setLocation(Main.class.getResource(scene._fxmlFileName));
         Parent newLayout = fMXLLoader.load();
         Scene newScene = new Scene(newLayout);
         _primaryStage.setScene(newScene);
         _primaryStage.show();
+    }
+
+    static public void setPrimaryStage(Stage primaryStage) {
+        _primaryStage = primaryStage;
     }
 }
