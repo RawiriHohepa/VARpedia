@@ -11,9 +11,9 @@ public class FileManager {
     private String _selectedFileName;
 
     // The quiz directory where all quiz videos are stored.
-    private static File TARGET_FOLDER = null;
+    private Folders TARGET_FOLDER;
 
-    public FileManager(File targetFolder) {
+    public FileManager(Folders targetFolder) {
         TARGET_FOLDER = targetFolder;
     }
     //===================FILES=======================
@@ -26,13 +26,12 @@ public class FileManager {
     }
     public void deleteSelectedFile() {
         getSelectedFile().delete();
-        System.out.println(getSelectedFile().toString());
         _selectedFileName = null;
     }
     private File getSelectedFile() {
         // Removal of the index on the quiz video name
         // and creating it as a file to be played or deleted.
-        return new File(TARGET_FOLDER + "/" + getSelectedFileName() + ".mp4");
+        return new File(TARGET_FOLDER.asString() + "/" + getSelectedFileName() + ".mp4");
     }
     public ObservableList<String> getCurrentFilesList() {
         List<String> fileNamesList = new ArrayList<String>();
@@ -40,7 +39,7 @@ public class FileManager {
         // Will get every file in the quiz directory and create an indexed
         // list of file names.
         int indexCounter = 1;
-        for (final File file : TARGET_FOLDER.listFiles()) {
+        for (File file : TARGET_FOLDER.asFolder().listFiles()) {
             String fileName = file.getName();
             if (fileName.endsWith(".mp4")) {
                 fileNamesList.add("" + indexCounter + ". " + fileName.replace(".mp4", ""));

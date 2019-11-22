@@ -5,10 +5,9 @@ import application.Main;
 import application.Scenes;
 import application.logic.AlertBuilder;
 import application.logic.FileManager;
+import application.logic.Folders;
 import application.logic.ListCreations;
 import javafx.beans.binding.BooleanBinding;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -41,7 +40,7 @@ public class ListCreationsController {
     public void initialize() {
         _listCreations = new ListCreations();
         _backgroundMusicPlayer = Main.getBackgroundMusicPlayer();
-        _fileManager = new FileManager(ListCreations.CREATIONS_FOLDER);
+        _fileManager = new FileManager(Folders.CREATIONS);
 
         _backgroundMusicButton.setText(_backgroundMusicPlayer.getButtonText());
         _backgroundMusicButton.setSelected(_backgroundMusicPlayer.getButtonIsSelected());
@@ -83,12 +82,12 @@ public class ListCreationsController {
 
     @FXML
     private void handleDeleteButton() {
-        AlertBuilder alertBuilder = new AlertBuilder()
+        Alert deleteConfirmation = new AlertBuilder()
                 .setAlertType(Alert.AlertType.CONFIRMATION)
                 .setTitle("Confirm Deletion")
                 .setHeaderText("Delete " + _fileManager.getSelectedFileName() + "?")
-                .setContentText("Are you sure you want to delete this creation?");
-        Alert deleteConfirmation = alertBuilder.getResult();
+                .setContentText("Are you sure you want to delete this creation?")
+                .getResult();
         Optional<ButtonType> buttonClicked = deleteConfirmation.showAndWait();
 
         if (buttonClicked.isPresent() && buttonClicked.get() == ButtonType.OK) {
@@ -106,7 +105,7 @@ public class ListCreationsController {
     }
 
     public static File getSelectedFile() {
-        return new File(ListCreations.CREATIONS_FOLDER + "/" + getSelectedCreationName() + ".mp4");
+        return new File(Folders.CREATIONS.asString() + "/" + getSelectedCreationName() + ".mp4");
     }
 
     public static String getSelectedCreationName() {

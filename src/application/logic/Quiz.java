@@ -9,9 +9,6 @@ public class Quiz {
     private int _currentScore;
     private String _quizTerm;
 
-    // The quiz directory where all quiz videos are stored.
-    public static final File QUIZ_FOLDER = new File(System.getProperty("user.dir") + "/quiz/");
-
     public Quiz() {
         Main.setCurrentScene("QuizScene");
 
@@ -20,7 +17,7 @@ public class Quiz {
     //==================QUIZ VIDEO AND TERM===============================
     // This method will retrieve a random quiz video from the current repository of quiz videos.
     public File selectRandomVideo() {
-        File[] quizVideosArray = QUIZ_FOLDER.listFiles();
+        File[] quizVideosArray = Folders.QUIZ.asFolder().listFiles();
 
         List<File> quizVideosList = new ArrayList<File>(Arrays.asList(quizVideosArray));
         Collections.shuffle(quizVideosList);

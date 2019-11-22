@@ -1,6 +1,8 @@
 package application.controller;
 
 import application.Scenes;
+import application.logic.AlertBuilder;
+import application.logic.Folders;
 import application.tasks.CombineChunksTask;
 import application.Main;
 import application.tasks.WikiSearchTask;
@@ -139,11 +141,12 @@ public class NewCreationController {
                     if (searchResult.contains("not found :^")) {
                         _searchInProgress.setVisible(false);
 
-                        Alert invalidSearchAlert = new Alert(Alert.AlertType.ERROR);
-                        invalidSearchAlert.getDialogPane().getStylesheets().add(("Alert.css"));
-                        invalidSearchAlert.setTitle("That term cannot be searched");
-                        invalidSearchAlert.setHeaderText(null);
-                        invalidSearchAlert.setContentText("Please enter a different search term");
+                        Alert invalidSearchAlert = new AlertBuilder()
+                                .setAlertType(Alert.AlertType.ERROR)
+                                .setTitle("That term cannot be searched")
+                                .setHeaderText(null)
+                                .setContentText("Please enter a different search term")
+                                .getResult();
                         invalidSearchAlert.showAndWait();
 
                     } else {
@@ -212,7 +215,7 @@ public class NewCreationController {
     private void handleDeleteChunkButton() {
         int chunkIndex = _chunkList.getSelectionModel().getSelectedIndex();
         _chunkList.getItems().remove(chunkIndex);
-        File _selectedfile = new File(System.getProperty("user.dir") + "/chunks/" + _selectedChunk + ".wav");
+        File _selectedfile = new File(Folders.CHUNKS.asString() + _selectedChunk + ".wav");
         _selectedfile.delete();
 
         _chunkList.getSelectionModel().clearSelection();
@@ -260,7 +263,7 @@ public class NewCreationController {
 
     @FXML
     private void handleSelectButton() {
-        File outputFolder = new File(System.getProperty("user.dir") + "/creations/" + _searchTerm);
+        File outputFolder = new File(Folders.CREATIONS.asString() + _searchTerm);
         if (!outputFolder.exists()) {
             outputFolder.mkdirs();
         }
@@ -330,7 +333,7 @@ public class NewCreationController {
 
     private void updateChunkList() {
         // The chunks directory where all chunks are stored.
-        final File chunksFolder = new File(System.getProperty("user.dir") + "/chunks/");
+        File chunksFolder = Folders.CHUNKS.asFolder();
         if (!chunksFolder.exists()) {
             chunksFolder.mkdirs();
         }
@@ -367,16 +370,12 @@ public class NewCreationController {
 
         // If the user selects 30 or more words, they must confirm that they want to continue
         String warningMessage = "Chunks longer than 30 words can result in a lower sound quality. Are you sure you want to create this chunk?";
-        Alert alert = new Alert(AlertType.WARNING, warningMessage, ButtonType.CANCEL, ButtonType.YES);
-        alert.getDialogPane().getStylesheets().add(("Alert.css"));
+        Alert longChunkConfirmationPopup = new Alert(AlertType.WARNING, warningMessage, ButtonType.CANCEL, ButtonType.YES);
+        longChunkConfirmationPopup.getDialogPane().getStylesheets().add(("Alert.css"));
         // Display the confirmation alert and store the button pressed
-        Optional<ButtonType> buttonClicked = alert.showAndWait();
+        Optional<ButtonType> buttonClicked = longChunkConfirmationPopup.showAndWait();
 
-        if (buttonClicked.isPresent() && buttonClicked.get() == ButtonType.YES) {
-            return true;
-        } else {
-            return false;
-        }
+        return (buttonClicked.isPresent() && buttonClicked.get() == ButtonType.YES);
     }
 
     private int numberOfWords(String chunk) {
@@ -422,7 +421,7 @@ public class NewCreationController {
 
     // This method will clean the chunks folder if the creation is cancelled.
     private void cleanChunks() {
-        File chunksFolder = new File(System.getProperty("user.dir") + "/chunks/");
+        File chunksFolder = Folders.CHUNKS.asFolder();
         if (chunksFolder.exists()) {
             for (final File chunkFileName : chunksFolder.listFiles()) {
                 chunkFileName.delete();

@@ -3,10 +3,7 @@ package application.controller;
 import application.BackgroundMusicPlayer;
 import application.Main;
 import application.Scenes;
-import application.logic.AlertBuilder;
-import application.logic.FileManager;
-import application.logic.Quiz;
-import application.logic.VideoPlayer;
+import application.logic.*;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.fxml.FXML;
@@ -67,7 +64,7 @@ public class QuizController {
         _quiz = new Quiz();
         _backgroundMusicPlayer = Main.getBackgroundMusicPlayer();
         _videoPlayer = new VideoPlayer();
-        _fileManager = new FileManager(Quiz.QUIZ_FOLDER);
+        _fileManager = new FileManager(Folders.QUIZ);
 
         _currentScoreText.setText("   Current Score: " + _quiz.getCurrentScore());
         _quizPlayer.setVisible(false);
@@ -102,7 +99,6 @@ public class QuizController {
         _checkButton.disableProperty().bind(textIsEmpty);
     }
 
-
     @FXML
     private void handleStartButton() {
         _quizPlayer.setVisible(true);
@@ -126,7 +122,7 @@ public class QuizController {
     private void handleCheckButton() {
         _videoPlayer.pauseMediaPlayer();
 
-        AlertBuilder alertBuilder = new AlertBuilder()
+        AlertBuilder answerResultPopupBuilder = new AlertBuilder()
                 .setAlertType(Alert.AlertType.INFORMATION)
                 .setHeaderText(null);
 
@@ -136,15 +132,15 @@ public class QuizController {
             _currentScoreText.setText("   Current Score: " + _quiz.getCurrentScore());
             _playerAnswerTextField.setText("");
 
-            alertBuilder.setTitle("Well done that was right.")
+            answerResultPopupBuilder.setTitle("Well done that was right.")
                     .setContentText("Good luck in the next one.");
-            alertBuilder.getResult().showAndWait();
+            answerResultPopupBuilder.getResult().showAndWait();
 
             _startButton.fire();
         } else {
-            alertBuilder.setTitle("Sorry that was wrong.")
+            answerResultPopupBuilder.setTitle("Sorry that was wrong.")
                     .setContentText("Please try again.");
-            alertBuilder.getResult().showAndWait();
+            answerResultPopupBuilder.getResult().showAndWait();
 
             _videoPlayer.playMediaPlayer();
         }
@@ -199,12 +195,12 @@ public class QuizController {
 
     @FXML
     private void handleDeleteButton() {
-        AlertBuilder alertBuilder = new AlertBuilder()
+        Alert deleteConfirmation = new AlertBuilder()
                 .setAlertType(Alert.AlertType.CONFIRMATION)
                 .setTitle("Confirm Deletion")
                 .setHeaderText("Delete " + _fileManager.getSelectedFileName() + "?")
-                .setContentText("Are you sure you want to delete this quiz?");
-        Alert deleteConfirmation = alertBuilder.getResult();
+                .setContentText("Are you sure you want to delete this quiz?")
+                .getResult();
         Optional<ButtonType> buttonClicked = deleteConfirmation.showAndWait();
 
         if (buttonClicked.isPresent() && buttonClicked.get() == ButtonType.OK) {

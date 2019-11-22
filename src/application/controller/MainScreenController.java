@@ -2,6 +2,7 @@ package application.controller;
 
 import application.Main;
 import application.Scenes;
+import application.logic.AlertBuilder;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ToggleButton;
@@ -36,11 +37,12 @@ public class MainScreenController {
         if (!(quizFolder.listFiles().length == 0)) {
             Scenes.changeScene(Scenes.QUIZ_SCENE);
         } else {
-            Alert noQuizVideoAlert = new Alert(Alert.AlertType.WARNING);
-            noQuizVideoAlert.getDialogPane().getStylesheets().add(("Alert.css"));
-            noQuizVideoAlert.setTitle("No quiz videos");
-            noQuizVideoAlert.setHeaderText("There are currently no quiz videos to learn from.");
-            noQuizVideoAlert.setContentText("Please create a creation first and then start the quiz.");
+            Alert noQuizVideoAlert = new AlertBuilder()
+                    .setAlertType(Alert.AlertType.WARNING)
+                    .setTitle("No quiz videos")
+                    .setHeaderText("There are currently no quiz videos to learn from.")
+                    .setContentText("Please create a creation first and then start the quiz.")
+                    .getResult();
             noQuizVideoAlert.showAndWait();
         }
     }
@@ -53,50 +55,49 @@ public class MainScreenController {
 
     @FXML
     private void handleCreateInformation() {
-        Alert createInfo = new Alert(Alert.AlertType.INFORMATION);
-        createInfo.getDialogPane().getStylesheets().add(("Alert.css"));
-
-        createInfo.setTitle("Make a new creation");
-        createInfo.setHeaderText("Make a brand cew creation to watch or learn from.");
-        createInfo.setContentText("You will be guided through the creation process step by step. " +
-                "You can make a creation for anything that you want to know about.");
+        Alert createInfo = new AlertBuilder()
+                .setAlertType(Alert.AlertType.INFORMATION)
+                .setTitle("Make a new creation")
+                .setHeaderText("Make a brand cew creation to watch or learn from.")
+                .setContentText("You will be guided through the creation process step by step. " +
+                        "You can make a creation for anything that you want to know about.")
+                .getResult();
         createInfo.show();
     }
 
     @FXML
     private void handlePlayInformation() {
-        Alert playInfo = new Alert(Alert.AlertType.INFORMATION);
-        playInfo.getDialogPane().getStylesheets().add(("Alert.css"));
-        playInfo.setTitle("Watch a creation");
-        playInfo.setHeaderText("Watch any creation that you have made.");
-        playInfo.setContentText("You will see a list of creations that you have made in the past. " +
-                "You can play any creation that you want to.");
+        Alert playInfo = new AlertBuilder()
+                .setAlertType(Alert.AlertType.INFORMATION)
+                .setTitle("Watch a creation")
+                .setHeaderText("Watch any creation that you have made.")
+                .setContentText("You will see a list of creations that you have made in the past. " +
+                    "You can play any creation that you want to.")
+                .getResult();
         playInfo.show();
     }
 
     @FXML
     private void handleLearnInformation() {
-        Alert learnInfo = new Alert(Alert.AlertType.INFORMATION);
-        learnInfo.setTitle("Play a game");
-        learnInfo.getDialogPane().getStylesheets().add(("Alert.css"));
-        learnInfo.setHeaderText("A fun quiz game begins when you press the button.");
-        learnInfo.setContentText("You will be quizzed based on all past creations you have made. " +
-                "Good luck going for the highest score.");
+        Alert learnInfo = new AlertBuilder()
+                .setAlertType(Alert.AlertType.INFORMATION)
+                .setTitle("Play a game")
+                .setHeaderText("A fun quiz game begins when you press the button.")
+                .setContentText("You will be quizzed based on all past creations you have made. " +
+                    "Good luck going for the highest score.")
+                .getResult();
         learnInfo.show();
-
     }
 
     @FXML
     private void handleVarpediaInformation() {
-        Alert varpediaInfo = new Alert(Alert.AlertType.INFORMATION);
-        varpediaInfo.setTitle("Welcome to VARpedia");
-        varpediaInfo.getDialogPane().getStylesheets().add(("Alert.css"));
-        varpediaInfo.setHeaderText("A Visual, Aural and Reading encyclopedia.");
-        varpediaInfo.setContentText("For the feature overview of this application please " +
-                "refer to the User Manual where each feature is explained fully.");
+        Alert varpediaInfo = new AlertBuilder()
+                .setAlertType(Alert.AlertType.INFORMATION)
+                .setTitle("Welcome to VARpedia")
+                .setHeaderText("A Visual, Aural and Reading encyclopedia.")
+                .setContentText("For the feature overview of this application please " +
+                    "refer to the User Manual where each feature is explained fully.")
+                .getResult();
         varpediaInfo.show();
-
     }
-
-
 }

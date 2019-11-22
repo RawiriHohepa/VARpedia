@@ -1,6 +1,8 @@
 package application.controller;
 
 import application.Scenes;
+import application.logic.AlertBuilder;
+import application.logic.Folders;
 import application.tasks.FlickrImagesTask;
 import application.Main;
 import application.tasks.ImageVideoTask;
@@ -94,7 +96,6 @@ public class ImagesSelectionController {
     private int _numberOfImages;
 
     private File _imagesFolder;
-    private final String CREATIONS_DIR = System.getProperty("user.dir") + "/creations/";
 
     @FXML
     private void initialize() {
@@ -105,7 +106,7 @@ public class ImagesSelectionController {
         _backgroundMusicButton.setSelected(Main.getBackgroundMusicPlayer().getButtonIsSelected());
 
         _searchTerm = NewCreationController.getSearchTerm();
-        _imagesFolder = new File(CREATIONS_DIR + _searchTerm);
+        _imagesFolder = new File(Folders.CREATIONS.asString() + _searchTerm);
 
         _flickrImageViewList = new ArrayList<ImageView>(Arrays.asList(_ImageView0, _ImageView1, _ImageView2, _ImageView3, _ImageView4, _ImageView5
                 , _ImageView6, _ImageView7, _ImageView8, _ImageView9));
@@ -139,37 +140,39 @@ public class ImagesSelectionController {
 
         _numberOfImages = 10 - numImagesDeleted;
         if (_numberOfImages == 0) {
-            Alert noImagesSelectedError = new Alert(Alert.AlertType.WARNING);
-            noImagesSelectedError.getDialogPane().getStylesheets().add(("Alert.css"));
-            noImagesSelectedError.setTitle("No images selected");
-            noImagesSelectedError.setContentText("Please select at least one image.");
+            Alert noImagesSelectedError = new AlertBuilder()
+                    .setAlertType(Alert.AlertType.WARNING)
+                    .setTitle("No images selected")
+                    .setContentText("Please select at least one image.")
+                    .getResult();
             noImagesSelectedError.showAndWait();
             return;
         }
 
         // checking that the creation name is valid set of inputs
         if (_creationNameTextField.getText().isEmpty()) {
-
+            return;
         } else if (!_creationNameTextField.getText().matches("[a-zA-Z0-9_-]*")) {
-            Alert invalidCreationNameError = new Alert(Alert.AlertType.WARNING);
-            invalidCreationNameError.getDialogPane().getStylesheets().add(("Alert.css"));
-            invalidCreationNameError.setTitle("Invalid Creation name");
-            invalidCreationNameError.setContentText("Please enter a valid creation name consisting of alphabet letters, digits, underscores, and hyphens only.");
+            Alert invalidCreationNameError = new AlertBuilder()
+                    .setAlertType(Alert.AlertType.WARNING)
+                    .setTitle("Invalid Creation name")
+                    .setContentText("Please enter a valid creation name consisting of alphabet letters, digits, underscores, and hyphens only.")
+                    .getResult();
             invalidCreationNameError.showAndWait();
         } else if (!isUniqueCreationName(_creationNameTextField.getText())) {
-
-            Alert overrideExistingCreationPopup = new Alert(Alert.AlertType.CONFIRMATION);
-            overrideExistingCreationPopup.getDialogPane().getStylesheets().add(("Alert.css"));
-            overrideExistingCreationPopup.setTitle("Override");
-            overrideExistingCreationPopup.setHeaderText("Creation name already exists");
-            overrideExistingCreationPopup.setContentText("Would you like to override the existing creation?");
+            Alert overrideExistingCreationPopup = new AlertBuilder()
+                    .setAlertType(Alert.AlertType.CONFIRMATION)
+                    .setTitle("Override")
+                    .setHeaderText("Creation name already exists")
+                    .setContentText("Would you like to override the existing creation?")
+                    .getResult();
             Optional<ButtonType> buttonClicked = overrideExistingCreationPopup.showAndWait();
 
             // Override existing file name
             // This is the same as deleting the current file and creating a new file.
             if (buttonClicked.get() == ButtonType.OK) {
                 String creationName = _creationNameTextField.getText();
-                File _existingFile = new File(CREATIONS_DIR + creationName + ".mp4");
+                File _existingFile = new File(Folders.CREATIONS.asString() + creationName + ".mp4");
                 _existingFile.delete();
 
                 createVideo(creationName);
@@ -185,11 +188,12 @@ public class ImagesSelectionController {
       This method will pull images from flickr based on user input.
       Using these images a video will be created with the search term added as text.*/
     private void createVideo(String creationName) {
-        Alert creationInProgressPopup = new Alert(Alert.AlertType.INFORMATION);
-        creationInProgressPopup.getDialogPane().getStylesheets().add(("Alert.css"));
-        creationInProgressPopup.setTitle("Creation in progress");
-        creationInProgressPopup.setHeaderText("Creation is being made, please wait...");
-        creationInProgressPopup.setContentText("You will be informed when the creation is complete.");
+        Alert creationInProgressPopup = new AlertBuilder()
+                .setAlertType(Alert.AlertType.INFORMATION)
+                .setTitle("Creation in progress")
+                .setHeaderText("Creation is being made, please wait...")
+                .setContentText("You will be informed when the creation is complete.")
+                .getResult();
         creationInProgressPopup.show();
 
         // Thread to ensure that GUI remains concurrent while the video is being created
@@ -221,11 +225,12 @@ public class ImagesSelectionController {
                     }
                 }
 
-                Alert creationFinishedPopup = new Alert(Alert.AlertType.INFORMATION);
-                creationFinishedPopup.getDialogPane().getStylesheets().add(("Alert.css"));
-                creationFinishedPopup.setTitle("Creation completed");
-                creationFinishedPopup.setHeaderText("Creation completed: " + _creationNameTextField.getText() + " is finished");
-                creationFinishedPopup.setContentText("You can find it in the Creations or Quiz sections");
+                Alert creationFinishedPopup = new AlertBuilder()
+                        .setAlertType(Alert.AlertType.INFORMATION)
+                        .setTitle("Creation completed")
+                        .setHeaderText("Creation completed: " + _creationNameTextField.getText() + " is finished")
+                        .setContentText("You can find it in the Creations or Quiz sections")
+                        .getResult();
                 creationFinishedPopup.showAndWait();
             }
         });
@@ -235,8 +240,7 @@ public class ImagesSelectionController {
     // an existing creation. Returns false if the creation name is already used.
     // Returns true otherwise.
     private boolean isUniqueCreationName(String creationName) {
-        File creationsFolder = new File(CREATIONS_DIR);
-        for (final File creationFile : creationsFolder.listFiles()) {
+        for (File creationFile : Folders.CREATIONS.asFolder().listFiles()) {
             if (creationFile.getName().equals("" + creationName + ".mp4")) {
                 // An already existing creation name is invalid.
                 return false;
@@ -253,7 +257,7 @@ public class ImagesSelectionController {
         File quizFileName;
         do {
             defaultCreationName = _searchTerm + "-" + creationNumber;
-            quizFileName = new File(CREATIONS_DIR + defaultCreationName + ".mp4");
+            quizFileName = new File(Folders.CREATIONS.asString() + defaultCreationName + ".mp4");
             creationNumber++;
         } while (quizFileName.exists());
 
