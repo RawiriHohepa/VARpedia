@@ -15,7 +15,7 @@ import application.controller.NewCreationController;
 
 public class Main extends Application {
 
-	static private Stage _primaryStage;
+	static public Stage _primaryStage;
 	static private BackgroundMusicPlayer _backgroundMusicPlayer;
 	private static String _currentScene;
 
@@ -56,16 +56,8 @@ public class Main extends Application {
 		});
 	}
 
-	// This method is used throughout this application to change between scenes.
-	// Upon the correct button actions by the user, the scene will switch to the next scene indicated by
-	// the parameter String fxmlFileName.
 	static public void changeScene(String fxmlFileName) throws IOException {
-		FXMLLoader fMXLLoader = new FXMLLoader();
-		fMXLLoader.setLocation(Main.class.getResource(fxmlFileName));
-		Parent newLayout = fMXLLoader.load();
-		Scene newScene = new Scene(newLayout);
-		_primaryStage.setScene(newScene);
-		_primaryStage.show();
+		Scenes.changeScene(fxmlFileName);
 	}
 	
 	// This method will clean the temporary fold that stored the audio chunks, the flikr images

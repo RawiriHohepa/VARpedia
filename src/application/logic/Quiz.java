@@ -10,7 +10,7 @@ public class Quiz {
     private String _quizTerm;
 
     // The quiz directory where all quiz videos are stored.
-    private static final File QUIZ_FOLDER = new File(System.getProperty("user.dir") + "/quiz/");
+    public static final File QUIZ_FOLDER = new File(System.getProperty("user.dir") + "/quiz/");
 
     public Quiz() {
         Main.setCurrentScene("QuizScene");

@@ -2,6 +2,7 @@ package application.controller;
 
 import application.BackgroundMusicPlayer;
 import application.Main;
+import application.Scenes;
 import application.logic.AlertBuilder;
 import application.logic.FileManager;
 import application.logic.Quiz;
@@ -66,7 +67,7 @@ public class QuizController {
         _quiz = new Quiz();
         _backgroundMusicPlayer = Main.getBackgroundMusicPlayer();
         _videoPlayer = new VideoPlayer();
-        _fileManager = new FileManager();
+        _fileManager = new FileManager(Quiz.QUIZ_FOLDER);
 
         _currentScoreText.setText("   Current Score: " + _quiz.getCurrentScore());
         _quizPlayer.setVisible(false);
@@ -159,7 +160,7 @@ public class QuizController {
     @FXML
     private void handleBackButton() throws IOException {
         _videoPlayer.stopMediaPlayer();
-        Main.changeScene("resources/MainScreenScene.fxml");
+        Scenes.changeScene(Scenes.MAIN_SCREEN_SCENE.getSceneDir());
     }
 
     @FXML
@@ -186,14 +187,14 @@ public class QuizController {
     @FXML
     public void handleSelectedQuiz() {
         String selectedQuiz = _listOfQuiz.getSelectionModel().getSelectedItem();
-        _fileManager.setSelectedQuiz(selectedQuiz);
+        _fileManager.setSelectedFileName(selectedQuiz);
         if (selectedQuiz != null) {
             _selectPrompt.setText("");
         }
     }
 
     private void ListCurrentQuiz() {
-        _listOfQuiz.setItems(_fileManager.getCurrentListOfQuiz());
+        _listOfQuiz.setItems(_fileManager.getCurrentFilesList());
     }
 
     @FXML
@@ -201,7 +202,7 @@ public class QuizController {
         AlertBuilder alertBuilder = new AlertBuilder()
                 .setAlertType(Alert.AlertType.CONFIRMATION)
                 .setTitle("Confirm Deletion")
-                .setHeaderText("Delete " + _fileManager.getSelectedQuizName() + "?")
+                .setHeaderText("Delete " + _fileManager.getSelectedFileName() + "?")
                 .setContentText("Are you sure you want to delete this quiz?");
         Alert deleteConfirmation = alertBuilder.getResult();
         Optional<ButtonType> buttonClicked = deleteConfirmation.showAndWait();
@@ -218,7 +219,7 @@ public class QuizController {
     // Return back to quiz start screen.
     @FXML
     private void handleReturnButton() throws IOException {
-        Main.changeScene("resources/QuizScene.fxml");
+        Scenes.changeScene(Scenes.QUIZ_SCENE.getSceneDir());
     }
 
     @FXML

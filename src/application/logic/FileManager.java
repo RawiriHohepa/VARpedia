@@ -8,44 +8,47 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileManager {
-    private String _selectedQuiz;
+    private String _selectedFileName;
 
     // The quiz directory where all quiz videos are stored.
-    private static final File QUIZ_FOLDER = new File(System.getProperty("user.dir") + "/quiz/");
-    //===================FILES=======================
-    public void setSelectedQuiz(String selectedQuiz) {
-        _selectedQuiz = selectedQuiz;
+    private static File TARGET_FOLDER = null;
+
+    public FileManager(File targetFolder) {
+        TARGET_FOLDER = targetFolder;
     }
-    public String getSelectedQuizName() {
+    //===================FILES=======================
+    public void setSelectedFileName(String selectedFileName) {
+        _selectedFileName = selectedFileName;
+    }
+    public String getSelectedFileName() {
         // Removal of the index on the quiz video name
-        return ("" + _selectedQuiz.substring(_selectedQuiz.indexOf(".") + 2));
+        return ("" + _selectedFileName.substring(_selectedFileName.indexOf(".") + 2));
     }
     public void deleteSelectedFile() {
         getSelectedFile().delete();
         System.out.println(getSelectedFile().toString());
-        _selectedQuiz = null;
+        _selectedFileName = null;
     }
     private File getSelectedFile() {
         // Removal of the index on the quiz video name
         // and creating it as a file to be played or deleted.
-        String fileName = getSelectedQuizName();
-        return new File(QUIZ_FOLDER + "/" + fileName + ".mp4");
+        return new File(TARGET_FOLDER + "/" + getSelectedFileName() + ".mp4");
     }
-    public ObservableList<String> getCurrentListOfQuiz() {
-        List<String> creationNamesList = new ArrayList<String>();
+    public ObservableList<String> getCurrentFilesList() {
+        List<String> fileNamesList = new ArrayList<String>();
 
         // Will get every file in the quiz directory and create an indexed
         // list of file names.
         int indexCounter = 1;
-        for (final File quiz : QUIZ_FOLDER.listFiles()) {
-            String fileName = quiz.getName();
+        for (final File file : TARGET_FOLDER.listFiles()) {
+            String fileName = file.getName();
             if (fileName.endsWith(".mp4")) {
-                creationNamesList.add("" + indexCounter + ". " + fileName.replace(".mp4", ""));
+                fileNamesList.add("" + indexCounter + ". " + fileName.replace(".mp4", ""));
                 indexCounter++;
             }
         }
-
-        // Turning the list of quiz names into an listView<String> for the GUI.
-        return FXCollections.observableArrayList(creationNamesList);
+        
+        // Turning the list of file names into an listView<String> for the GUI.
+        return FXCollections.observableArrayList(fileNamesList);
     }
 }
