@@ -6,16 +6,14 @@ import application.Scenes;
 import application.logic.AlertBuilder;
 import application.logic.FileManager;
 import application.logic.Folders;
-import application.logic.ListCreations;
 import javafx.beans.binding.BooleanBinding;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Optional;
 
-public class ListCreationsController {
+public class ListCreationsController extends Controller {
     @FXML
     private ToggleButton _backgroundMusicButton;
 
@@ -29,13 +27,11 @@ public class ListCreationsController {
     @FXML
     private Label _selectPrompt;
 
-    private ListCreations _listCreations;
     private BackgroundMusicPlayer _backgroundMusicPlayer;
     private FileManager _fileManager;
 
     @FXML
     public void initialize() {
-        _listCreations = new ListCreations();
         _backgroundMusicPlayer = Main.getBackgroundMusicPlayer();
         _fileManager = new FileManager(Folders.CREATIONS);
 
@@ -51,17 +47,17 @@ public class ListCreationsController {
     }
 
     @FXML
-    private void handleNewCreationButton() throws IOException {
+    private void handleNewCreationButton() {
         Scenes.changeScene(Scenes.NEW_CREATION_SCENE);
     }
 
     @FXML
-    private void handlePlayButton() throws IOException {
+    private void handlePlayButton() {
         Scenes.changeScene(Scenes.PLAYER_SCENE);
     }
 
     @FXML
-    private void handleReturnButton() throws IOException {
+    private void handleReturnButton() {
         Scenes.changeScene(Scenes.MAIN_SCREEN_SCENE);
     }
 
@@ -69,8 +65,6 @@ public class ListCreationsController {
     public void handleSelectedCreation() {
         String selectedCreation = _listViewCreations.getSelectionModel().getSelectedItem();
         _fileManager.setSelectedFileName(selectedCreation);
-        //TODO remove after making getSelectedFile() non-static
-        ListCreations.setSelectedCreation(selectedCreation);
 
         if (selectedCreation != null) {
             _selectPrompt.setText("");
@@ -99,6 +93,15 @@ public class ListCreationsController {
     // This list will be displayed to the user in the view interface.
     public void ListCurrentFiles() {
         _listViewCreations.setItems(_fileManager.getCurrentFilesList());
+    }
+
+    public String getSelectedCreationName() {
+        // Removal of the index on the creation name
+        return _fileManager.getSelectedFileName();
+    }
+
+    public File getSelectedFile() {
+        return _fileManager.getSelectedFile();
     }
 
     @FXML

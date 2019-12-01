@@ -14,8 +14,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import application.tasks.PreviewTextTask;
 import application.tasks.SaveTextTask;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
@@ -24,15 +22,12 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-public class NewCreationController {
+public class NewCreationController extends Controller {
     @FXML
     private ToggleButton _backgroundMusicButton;
     @FXML
@@ -104,7 +99,7 @@ public class NewCreationController {
     }
 
     @FXML
-    private void handleCreationCancelButton() throws IOException {
+    private void handleCreationCancelButton() {
         _newCreation.cleanChunks();
         // Return to main menu
         Scenes.changeScene(Scenes.MAIN_SCREEN_SCENE);
@@ -112,7 +107,7 @@ public class NewCreationController {
 
     @FXML
     private void handleSearchWikipedia() {
-        NewCreation.setSearchTerm(_enterSearchTermTextInput.getText().trim());
+        _newCreation.setSearchTerm(_enterSearchTermTextInput.getText().trim());
 
         _searchImage.setVisible(false);
         _progressPane.setVisible(true);
@@ -121,7 +116,7 @@ public class NewCreationController {
         _searchInProgress.setVisible(true);
 
         // Run bash script that uses wikit and returns the result of the search
-        WikiSearchTask wikiSearchTask = new WikiSearchTask(NewCreation.getSearchTerm());
+        WikiSearchTask wikiSearchTask = new WikiSearchTask(_newCreation.getSearchTerm());
         _wikiProgressBar.progressProperty().bind(wikiSearchTask.progressProperty());
 
         _team.submit(wikiSearchTask);
@@ -255,7 +250,7 @@ public class NewCreationController {
 
     @FXML
     private void handleSelectButton() {
-        File outputFolder = new File(Folders.CREATIONS.asString() + NewCreation.getSearchTerm());
+        File outputFolder = new File(Folders.CREATIONS.asString() + _newCreation.getSearchTerm());
         if (!outputFolder.exists()) {
             outputFolder.mkdirs();
         }
@@ -267,15 +262,11 @@ public class NewCreationController {
         ObservableList<String> chunksList = _chunkList.getItems();
 
         // Run bash script to create a combined audio of each selected chunk
-        CombineChunksTask combineChunksTask = new CombineChunksTask(chunksList, NewCreation.getSearchTerm());
+        CombineChunksTask combineChunksTask = new CombineChunksTask(chunksList, _newCreation.getSearchTerm());
         _team.submit(combineChunksTask);
 
         combineChunksTask.setOnSucceeded(workerStateEvent -> {
-            try {
-                Scenes.changeScene(Scenes.IMAGES_SELECTION_SCENE);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            Scenes.changeScene(Scenes.IMAGES_SELECTION_SCENE);
         });
     }
 
@@ -383,5 +374,9 @@ public class NewCreationController {
     private void handleBackgroundMusic() {
         _backgroundMusicPlayer.handleBackgroundMusic(_backgroundMusicButton.isSelected());
         _backgroundMusicButton.setText(_backgroundMusicPlayer.getButtonText());
+    }
+
+    public String getSearchTerm() {
+        return _newCreation.getSearchTerm();
     }
 }

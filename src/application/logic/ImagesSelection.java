@@ -1,6 +1,7 @@
 package application.logic;
 
-import application.Main;
+import application.Scenes;
+import application.controller.NewCreationController;
 import javafx.scene.image.Image;
 
 import java.io.File;
@@ -13,9 +14,8 @@ public class ImagesSelection {
     private File _imagesFolder;
 
     public ImagesSelection() {
-        Main.setCurrentScene("ImageSelectionScene");
-        //TODO find way to pass search term here
-        _searchTerm = NewCreation.getSearchTerm();
+        NewCreationController newCreationController = (NewCreationController) Scenes.NEW_CREATION_SCENE.getController();
+        _searchTerm = newCreationController.getSearchTerm();
         _imagesFolder = new File(Folders.CREATIONS.asString() + _searchTerm);
     }
 

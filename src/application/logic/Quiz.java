@@ -1,7 +1,5 @@
 package application.logic;
 
-import application.Main;
-
 import java.io.File;
 import java.util.*;
 
@@ -10,11 +8,9 @@ public class Quiz {
     private String _quizTerm;
 
     public Quiz() {
-        Main.setCurrentScene("QuizScene");
-
         _currentScore = 0;
     }
-    //==================QUIZ VIDEO AND TERM===============================
+
     // This method will retrieve a random quiz video from the current repository of quiz videos.
     public File selectRandomVideo() {
         File[] quizVideosArray = Folders.QUIZ.asFolder().listFiles();
@@ -32,7 +28,7 @@ public class Quiz {
     public boolean answerIsCorrect(String answer) {
         return answer.equalsIgnoreCase(_quizTerm);
     }
-    //==================SCORE===============================
+
     public void incrementScore() {
         _currentScore++;
     }

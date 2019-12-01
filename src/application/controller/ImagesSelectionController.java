@@ -4,15 +4,12 @@ import application.BackgroundMusicPlayer;
 import application.Scenes;
 import application.logic.AlertBuilder;
 import application.logic.FileManager;
-import application.logic.Folders;
 import application.logic.ImagesSelection;
 import application.tasks.FlickrImagesTask;
 import application.Main;
 import application.tasks.ImageVideoTask;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -21,15 +18,13 @@ import javafx.scene.text.Text;
 import javafx.scene.image.Image;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-public class ImagesSelectionController {
+public class ImagesSelectionController extends Controller {
     @FXML
     private ImageView _flickrImage0;
     @FXML
@@ -94,14 +89,12 @@ public class ImagesSelectionController {
 
     private ImagesSelection _imagesSelection;
     private BackgroundMusicPlayer _backgroundMusicPlayer;
-    private FileManager _fileManager;
     private ExecutorService _team;
 
     @FXML
     private void initialize() {
         _imagesSelection = new ImagesSelection();
         _backgroundMusicPlayer = Main.getBackgroundMusicPlayer();
-        _fileManager = new FileManager(Folders.CREATIONS);
         _team = Main.getTeam();
 
         _clockImage.setVisible(true);
@@ -133,8 +126,7 @@ public class ImagesSelectionController {
         int numImagesDeleted = 0;
         for (int i = 0; i < _checkBoxIncludeImageList.size(); i++) {
             if (!_checkBoxIncludeImageList.get(i).isSelected()) {
-                File imageFile = new File(_imagesSelection.getImagesFolder() + "/" + i + ".jpg");
-                imageFile.delete();
+                new File(_imagesSelection.getImagesFolder() + "/" + i + ".jpg").delete();
                 numImagesDeleted++;
             }
         }
@@ -199,11 +191,7 @@ public class ImagesSelectionController {
         _team.submit(flickrImagesTask);
 
         // return to main menu
-        try {
-            Scenes.changeScene(Scenes.MAIN_SCREEN_SCENE);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Scenes.changeScene(Scenes.MAIN_SCREEN_SCENE);
 
         flickrImagesTask.setOnSucceeded(workerStateEvent -> {
             // close the 'in progress' popup
@@ -213,12 +201,8 @@ public class ImagesSelectionController {
             // This will refresh the List of creations only if the user is currently on the List of creations scene
             // Otherwise when the user enters, the initialize() method of ListCreationsController will
             // refresh the list of creations.
-            if (Main.currentSceneIsListCreations()) {
-                try {
-                    Scenes.changeScene(Scenes.LIST_CREATIONS_SCENE);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            if (Scenes.getCurrentScene().equals(Scenes.LIST_CREATIONS_SCENE)) {
+                Scenes.changeScene(Scenes.LIST_CREATIONS_SCENE);
             }
 
             Alert creationFinishedPopup = new AlertBuilder()
@@ -276,10 +260,10 @@ public class ImagesSelectionController {
     }
 
     @FXML
-    private void handleCreationCancelButton() throws IOException {
+    private void handleCreationCancelButton() {
         // Return to main menu
         Scenes.changeScene(Scenes.MAIN_SCREEN_SCENE);
-        Main.cleanFolders();
+        FileManager.cleanFolders();
     }
 
     @FXML

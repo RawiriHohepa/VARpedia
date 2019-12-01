@@ -1,7 +1,5 @@
 package application.logic;
 
-import application.Main;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,8 +9,6 @@ public class NewCreation {
     private String _selectedChunk;
 
     public NewCreation() {
-        Main.setCurrentScene("NewCreationScene");
-
         _selectedChunk = null;
     }
 
@@ -57,11 +53,11 @@ public class NewCreation {
         return chunkNamesList;
     }
 
-    public static void setSearchTerm(String searchTerm) {
+    public void setSearchTerm(String searchTerm) {
         _searchTerm = searchTerm;
     }
 
-    public static String getSearchTerm() {
+    public String getSearchTerm() {
         return _searchTerm;
     }
 

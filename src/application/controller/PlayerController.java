@@ -9,13 +9,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.Pane;
-import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
-import javafx.util.Duration;
-
-import java.io.IOException;
-
 
 /**
  * Media video creation will play as soon as the scene is loaded included
@@ -43,8 +38,6 @@ public class PlayerController {
 
     @FXML
     public void initialize() {
-        Main.setCurrentScene("PlayerScene");
-
         _backgroundMusicPlayer = Main.getBackgroundMusicPlayer();
         _videoPlayer = new VideoPlayer();
 
@@ -54,10 +47,10 @@ public class PlayerController {
 
         _videoPlayerPane.getChildren().removeAll();
 
-        _videoTitle.setText("  Now Playing: " + ListCreations.getSelectedCreationName());
+        ListCreationsController listCreationsController = (ListCreationsController) Scenes.LIST_CREATIONS_SCENE.getController();
+        _videoTitle.setText("  Now Playing: " + listCreationsController.getSelectedCreationName());
 
-        MediaPlayer mediaPlayer = _videoPlayer.createMediaPlayer(ListCreations.getSelectedFile());
-
+        MediaPlayer mediaPlayer = _videoPlayer.createMediaPlayer(listCreationsController.getSelectedFile());
         _mediaView.setMediaPlayer(mediaPlayer);
 
         //Once the video is finished the user will return to the main menu.
@@ -91,7 +84,7 @@ public class PlayerController {
 
     // Return to main menu
     @FXML
-    private void handleReturnButton() throws IOException {
+    private void handleReturnButton() {
         _videoPlayer.stopMediaPlayer();
         _videoPlayer.disposeMediaPlayer();
         Scenes.changeScene(Scenes.LIST_CREATIONS_SCENE);

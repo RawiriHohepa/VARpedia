@@ -1,5 +1,7 @@
 package application.logic;
 
+import application.Scenes;
+import application.controller.NewCreationController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -28,7 +30,7 @@ public class FileManager {
         getSelectedFile().delete();
         _selectedFileName = null;
     }
-    private File getSelectedFile() {
+    public File getSelectedFile() {
         // Removal of the index on the quiz video name
         // and creating it as a file to be played or deleted.
         return new File(TARGET_FOLDER.asString() + "/" + getSelectedFileName() + ".mp4");
@@ -49,5 +51,24 @@ public class FileManager {
         
         // Turning the list of file names into an listView<String> for the GUI.
         return FXCollections.observableArrayList(fileNamesList);
+    }
+
+    // This method will clean the temporary fold that stored the audio chunks, the flikr images
+    // the no audio .mp4 file the .wav file as well as the folders themselves.
+    public static void cleanFolders() {
+        NewCreationController newCreationController = (NewCreationController) Scenes.NEW_CREATION_SCENE.getController();
+        // The creations directory where all creations are stored.
+        File creationFolder = new File(Folders.CREATIONS.asString() + newCreationController.getSearchTerm() + "/" );
+        for (final File creationFileName : creationFolder.listFiles()) {
+            creationFileName.delete();
+        }
+        creationFolder.delete();
+
+        // The chunks directory where all audio chunks are stored.
+        File chunksFolder = Folders.CHUNKS.asFolder();
+        for (final File chunkFileName : chunksFolder.listFiles()) {
+            chunkFileName.delete();
+        }
+        chunksFolder.delete();
     }
 }

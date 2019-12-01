@@ -9,10 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ToggleButton;
 
-import java.io.File;
-import java.io.IOException;
-
-public class MainScreenController {
+public class MainScreenController extends Controller {
     @FXML
     private ToggleButton _backgroundMusicButton;
 
@@ -20,7 +17,6 @@ public class MainScreenController {
 
     @FXML
     public void initialize() {
-        Main.setCurrentScene("MainScreenScene");
         _backgroundMusicPlayer = Main.getBackgroundMusicPlayer();
 
         _backgroundMusicButton.setText(_backgroundMusicPlayer.getButtonText());
@@ -28,17 +24,17 @@ public class MainScreenController {
     }
 
     @FXML
-    private void handleListButton() throws IOException {
+    private void handleListButton() {
         Scenes.changeScene(Scenes.LIST_CREATIONS_SCENE);
     }
 
     @FXML
-    private void handleNewCreationButton() throws IOException {
+    private void handleNewCreationButton() {
         Scenes.changeScene(Scenes.NEW_CREATION_SCENE);
     }
 
     @FXML
-    private void handleQuizButton() throws IOException {
+    private void handleQuizButton() {
         if (Folders.QUIZ.asFolder().listFiles().length == 0) {
             Alert noQuizVideoAlert = new AlertBuilder()
                     .setAlertType(Alert.AlertType.WARNING)
