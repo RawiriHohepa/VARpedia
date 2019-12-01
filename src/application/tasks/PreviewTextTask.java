@@ -13,7 +13,7 @@ public class PreviewTextTask extends Task<Void> {
     }
 
     @Override
-    protected Void call() throws Exception {
+    protected Void call() {
         try {
             ProcessBuilder builder = new ProcessBuilder(new String[]{"/bin/bash", "-c", "festival --tts"});
             Process process = builder.start();
