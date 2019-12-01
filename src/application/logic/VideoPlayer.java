@@ -25,11 +25,6 @@ public class VideoPlayer {
 
         _mediaPlayer.setAutoPlay(true);
         _isPlaying = true;
-        //Once the video is finished the video will replay from the start
-        _mediaPlayer.setOnEndOfMedia(() -> {
-            _mediaPlayer.seek(Duration.ZERO);
-            _mediaPlayer.play();
-        });
 
         return _mediaPlayer;
     }
@@ -57,5 +52,18 @@ public class VideoPlayer {
     }
     private boolean mediaPlayerIsPlaying() {
         return _isPlaying;
+    }
+
+    // PlayerController-exclusive methods
+    public void toggleMute() {
+        _mediaPlayer.setMute(!_mediaPlayer.isMute());
+    }
+    public void changeVideoTime(int secondsToAdd) {
+        _mediaPlayer.seek(_mediaPlayer.getCurrentTime().add(Duration.seconds(secondsToAdd)));
+    }
+    public void disposeMediaPlayer() {
+        if (_mediaPlayer != null) {
+            _mediaPlayer.dispose();
+        }
     }
 }

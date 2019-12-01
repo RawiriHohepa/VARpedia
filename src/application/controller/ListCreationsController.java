@@ -13,7 +13,6 @@ import javafx.scene.control.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Optional;
 
 public class ListCreationsController {
@@ -33,8 +32,6 @@ public class ListCreationsController {
     private ListCreations _listCreations;
     private BackgroundMusicPlayer _backgroundMusicPlayer;
     private FileManager _fileManager;
-
-    private static String _selectedCreation;
 
     @FXML
     public void initialize() {
@@ -72,12 +69,12 @@ public class ListCreationsController {
     public void handleSelectedCreation() {
         String selectedCreation = _listViewCreations.getSelectionModel().getSelectedItem();
         _fileManager.setSelectedFileName(selectedCreation);
+        //TODO remove after making getSelectedFile() non-static
+        ListCreations.setSelectedCreation(selectedCreation);
+
         if (selectedCreation != null) {
             _selectPrompt.setText("");
         }
-
-        //TODO remove, somehow transfer info to PlayerController
-        _selectedCreation = selectedCreation;
     }
 
     @FXML
@@ -102,15 +99,6 @@ public class ListCreationsController {
     // This list will be displayed to the user in the view interface.
     public void ListCurrentFiles() {
         _listViewCreations.setItems(_fileManager.getCurrentFilesList());
-    }
-
-    public static File getSelectedFile() {
-        return new File(Folders.CREATIONS.asString() + "/" + getSelectedCreationName() + ".mp4");
-    }
-
-    public static String getSelectedCreationName() {
-        // Removal of the index on the creation name
-        return ("" + _selectedCreation.substring(_selectedCreation.indexOf(".") + 2));
     }
 
     @FXML

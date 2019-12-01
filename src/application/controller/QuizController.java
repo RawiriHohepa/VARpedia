@@ -12,6 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -114,6 +115,12 @@ public class QuizController {
         _backgroundMusicButtonInPlayer.setVisible(true);
 
         MediaPlayer quizPlayer = _videoPlayer.createMediaPlayer(_quiz.selectRandomVideo());
+        //Once the video is finished the video will replay from the start
+        quizPlayer.setOnEndOfMedia(() -> {
+            quizPlayer.seek(Duration.ZERO);
+            quizPlayer.play();
+        });
+
         _mediaView.setMediaPlayer(quizPlayer);
         _pausePlayButton.setText(_videoPlayer.getButtonText());
     }

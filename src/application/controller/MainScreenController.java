@@ -1,8 +1,10 @@
 package application.controller;
 
+import application.BackgroundMusicPlayer;
 import application.Main;
 import application.Scenes;
 import application.logic.AlertBuilder;
+import application.logic.Folders;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ToggleButton;
@@ -14,11 +16,15 @@ public class MainScreenController {
     @FXML
     private ToggleButton _backgroundMusicButton;
 
+    private BackgroundMusicPlayer _backgroundMusicPlayer;
+
     @FXML
     public void initialize() {
         Main.setCurrentScene("MainScreenScene");
-        _backgroundMusicButton.setText(Main.getBackgroundMusicPlayer().getButtonText());
-        _backgroundMusicButton.setSelected(Main.getBackgroundMusicPlayer().getButtonIsSelected());
+        _backgroundMusicPlayer = Main.getBackgroundMusicPlayer();
+
+        _backgroundMusicButton.setText(_backgroundMusicPlayer.getButtonText());
+        _backgroundMusicButton.setSelected(_backgroundMusicPlayer.getButtonIsSelected());
     }
 
     @FXML
@@ -33,10 +39,7 @@ public class MainScreenController {
 
     @FXML
     private void handleQuizButton() throws IOException {
-        File quizFolder = new File(System.getProperty("user.dir") + "/quiz/");
-        if (!(quizFolder.listFiles().length == 0)) {
-            Scenes.changeScene(Scenes.QUIZ_SCENE);
-        } else {
+        if (Folders.QUIZ.asFolder().listFiles().length == 0) {
             Alert noQuizVideoAlert = new AlertBuilder()
                     .setAlertType(Alert.AlertType.WARNING)
                     .setTitle("No quiz videos")
@@ -44,13 +47,15 @@ public class MainScreenController {
                     .setContentText("Please create a creation first and then start the quiz.")
                     .getResult();
             noQuizVideoAlert.showAndWait();
+        } else {
+            Scenes.changeScene(Scenes.QUIZ_SCENE);
         }
     }
 
     @FXML
     private void handleBackgroundMusic() {
-        Main.getBackgroundMusicPlayer().handleBackgroundMusic(_backgroundMusicButton.isSelected());
-        _backgroundMusicButton.setText(Main.getBackgroundMusicPlayer().getButtonText());
+        _backgroundMusicPlayer.handleBackgroundMusic(_backgroundMusicButton.isSelected());
+        _backgroundMusicButton.setText(_backgroundMusicPlayer.getButtonText());
     }
 
     @FXML

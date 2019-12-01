@@ -10,13 +10,15 @@ import javafx.stage.WindowEvent;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import application.controller.NewCreationController;
 
 public class Main extends Application {
-
-	static private BackgroundMusicPlayer _backgroundMusicPlayer;
-	private static String _currentScene;
+	private static ExecutorService _team = Executors.newFixedThreadPool(5);
+	private static BackgroundMusicPlayer _backgroundMusicPlayer;
+	private static String _currentScene = "";
 
 	public static void main(String[] args) {
 		launch(args);
@@ -57,7 +59,7 @@ public class Main extends Application {
 	
 	// This method will clean the temporary fold that stored the audio chunks, the flikr images
     // the no audio .mp4 file the .wav file as well as the folders themselves.
-	static public void cleanFolders() {
+	public static void cleanFolders() {
 		String userDir = System.getProperty("user.dir");
 		// The creations directory where all creations are stored.
 		File creationFolder = new File(userDir + "/creations/" + NewCreationController.getSearchTerm() + "/" );
@@ -75,15 +77,19 @@ public class Main extends Application {
 	}
 
 
-	static public void setCurrentScene(String currentScene){
-		_currentScene=currentScene;
+	public static void setCurrentScene(String currentScene){
+		_currentScene = currentScene;
 	}
 
-	static public String getCurrentScene(){
-		return _currentScene;
+	public static boolean currentSceneIsListCreations() {
+		return _currentScene.equals("ListCreationScene");
 	}
 	
-	static public BackgroundMusicPlayer getBackgroundMusicPlayer() {
+	public static BackgroundMusicPlayer getBackgroundMusicPlayer() {
 		return _backgroundMusicPlayer;
+	}
+
+	public static ExecutorService getTeam() {
+		return _team;
 	}
 }
