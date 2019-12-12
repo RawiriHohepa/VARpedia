@@ -1,25 +1,25 @@
 package application.controller;
 
+import application.BackgroundMusicPlayer;
 import application.Main;
+import application.Scenes;
+import application.logic.AlertBuilder;
+import application.logic.FileManager;
+import application.logic.Folders;
 import javafx.beans.binding.BooleanBinding;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Optional;
 
-public class ListCreationsController {
+public class ListCreationsController extends Controller {
     @FXML
     private ToggleButton _backgroundMusicButton;
 
     @FXML
     private ListView<String> _listViewCreations;
 
-    private static String _selectedCreation;
     @FXML
     private Button _playButton;
     @FXML
@@ -27,60 +27,64 @@ public class ListCreationsController {
     @FXML
     private Label _selectPrompt;
 
+    private BackgroundMusicPlayer _backgroundMusicPlayer;
+    private FileManager _fileManager;
 
     @FXML
     public void initialize() {
+        _backgroundMusicPlayer = Main.getBackgroundMusicPlayer();
+        _fileManager = new FileManager(Folders.CREATIONS);
 
-        Main.setCurrentScene("ListCreationScene");
-        _backgroundMusicButton.setText(Main.backgroundMusicPlayer().getButtonText());
-        _backgroundMusicButton.setSelected(Main.backgroundMusicPlayer().getButtonIsSelected());
-
-        ListCurrentFiles();
+        _backgroundMusicButton.setText(_backgroundMusicPlayer.getButtonText());
+        _backgroundMusicButton.setSelected(_backgroundMusicPlayer.getButtonIsSelected());
 
         // Disable the buttons whenever there is no creation selected
         BooleanBinding noCreationSelected = _listViewCreations.getSelectionModel().selectedItemProperty().isNull();
         _playButton.disableProperty().bind(noCreationSelected);
         _deleteButton.disableProperty().bind(noCreationSelected);
 
+        ListCurrentFiles();
     }
 
     @FXML
-    private void handleNewCreationButton() throws IOException {
-        Main.changeScene("resources/NewCreationScene.fxml");
-    }
-
-
-    @FXML
-    private void handlePlayButton() throws IOException {
-        Main.changeScene("resources/PlayerScene.fxml");
+    private void handleNewCreationButton() {
+        Scenes.changeScene(Scenes.NEW_CREATION_SCENE);
     }
 
     @FXML
-    private void handleReturnButton() throws IOException {
-        Main.changeScene("resources/MainScreenScene.fxml");
+    private void handlePlayButton() {
+        Scenes.changeScene(Scenes.PLAYER_SCENE);
+    }
+
+    @FXML
+    private void handleReturnButton() {
+        Scenes.changeScene(Scenes.MAIN_SCREEN_SCENE);
     }
 
     @FXML
     public void handleSelectedCreation() {
-        _selectedCreation = _listViewCreations.getSelectionModel().getSelectedItem();
-        if (!(_selectedCreation == null)) {
+        String selectedCreation = _listViewCreations.getSelectionModel().getSelectedItem();
+        _fileManager.setSelectedFileName(selectedCreation);
+
+        if (selectedCreation != null) {
             _selectPrompt.setText("");
         }
     }
 
     @FXML
     private void handleDeleteButton() {
-        Alert deleteConfirmation = new Alert(Alert.AlertType.CONFIRMATION);
-        deleteConfirmation.getDialogPane().getStylesheets().add(("Alert.css"));
-        deleteConfirmation.setTitle("Confirm Deletion");
-        deleteConfirmation.setHeaderText("Delete " + getSelectedCreationName() + "?");
-        deleteConfirmation.setContentText("Are you sure you want to delete this creation?");
+        Alert deleteConfirmation = new AlertBuilder()
+                .setAlertType(Alert.AlertType.CONFIRMATION)
+                .setTitle("Confirm Deletion")
+                .setHeaderText("Delete " + _fileManager.getSelectedFileName() + "?")
+                .setContentText("Are you sure you want to delete this creation?")
+                .getResult();
         Optional<ButtonType> buttonClicked = deleteConfirmation.showAndWait();
 
-        if (buttonClicked.get() == ButtonType.OK) {
-            getSelectedFile().delete();
+        if (buttonClicked.isPresent() && buttonClicked.get() == ButtonType.OK) {
+            _fileManager.deleteSelectedFile();
             ListCurrentFiles();
-            _selectedCreation = null;
+
             _selectPrompt.setText("                  Please select a creation to continue.");
         }
     }
@@ -88,45 +92,21 @@ public class ListCreationsController {
     // This will return a list of all current creations in the creations directory.
     // This list will be displayed to the user in the view interface.
     public void ListCurrentFiles() {
-
-        // The creations directory where all creations are stored.
-        final File creationsFolder = new File(System.getProperty("user.dir") + "/creations/");
-        ArrayList<String> creationNamesList = new ArrayList<String>();
-
-        // Will get every file in the creations directory and create an indexed
-        // list of file names.
-        int indexCounter = 1;
-        for (final File file : creationsFolder.listFiles()) {
-            String fileName = file.getName();
-            if (fileName.endsWith(".mp4")) {
-                creationNamesList.add("" + indexCounter + ". " + fileName.replace(".mp4", ""));
-                indexCounter++;
-            }
-        }
-
-        // Turning the list of creation names into an listView<String> for the GUI.
-        ObservableList<String> observableCreationNamesList = FXCollections.observableArrayList(creationNamesList);
-        _listViewCreations.setItems(observableCreationNamesList);
+        _listViewCreations.setItems(_fileManager.getCurrentFilesList());
     }
 
-    public static File getSelectedFile() {
-        // Turning a string of the file name into a file to be played or deleted.
-        String fileName = getSelectedCreationName();
-        File selectedfile = new File(System.getProperty("user.dir") + "/creations/" + fileName + ".mp4");
-
-        return selectedfile;
-    }
-
-    public static String getSelectedCreationName() {
+    public String getSelectedCreationName() {
         // Removal of the index on the creation name
-        String fileName = ("" + _selectedCreation.substring(_selectedCreation.indexOf(".") + 2));
-        return fileName;
+        return _fileManager.getSelectedFileName();
     }
 
+    public File getSelectedFile() {
+        return _fileManager.getSelectedFile();
+    }
 
     @FXML
     private void handleBackgroundMusic() {
-        Main.backgroundMusicPlayer().handleBackgroundMusic(_backgroundMusicButton.isSelected());
-        _backgroundMusicButton.setText(Main.backgroundMusicPlayer().getButtonText());
+        _backgroundMusicPlayer.handleBackgroundMusic(_backgroundMusicButton.isSelected());
+        _backgroundMusicButton.setText(_backgroundMusicPlayer.getButtonText());
     }
 }

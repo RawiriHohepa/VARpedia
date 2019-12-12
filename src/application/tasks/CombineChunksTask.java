@@ -14,7 +14,7 @@ public class CombineChunksTask extends Task<Void> {
     }
 
     @Override
-    protected Void call() throws Exception {
+    protected Void call() {
         try {
             // Convert the ObservableList of chunks into a single string, with each element separated by a space
             String chunksListAsString = "";

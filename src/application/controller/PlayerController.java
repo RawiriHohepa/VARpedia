@@ -1,18 +1,16 @@
 package application.controller;
 
+import application.BackgroundMusicPlayer;
 import application.Main;
+import application.Scenes;
+import application.logic.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.Pane;
-import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
-import javafx.util.Duration;
-
-import java.io.IOException;
-
 
 /**
  * Media video creation will play as soon as the scene is loaded included
@@ -34,83 +32,68 @@ public class PlayerController {
 
     @FXML
     private MediaView _mediaView;
-    private MediaPlayer _mediaPlayer;
+
+    private BackgroundMusicPlayer _backgroundMusicPlayer;
+    private VideoPlayer _videoPlayer;
 
     @FXML
     public void initialize() {
-        Main.setCurrentScene("PlayerScene");
+        _backgroundMusicPlayer = Main.getBackgroundMusicPlayer();
+        _videoPlayer = new VideoPlayer();
 
         // Initialise the media player with a video as soon as scene is loaded.
-        String buttonText = Main.backgroundMusicPlayer().getButtonText();
-        _backgroundMusicButton.setText(buttonText);
-        _backgroundMusicButtonInPlayer.setText(buttonText);
-        boolean buttonIsSelected = Main.backgroundMusicPlayer().getButtonIsSelected();
-        _backgroundMusicButton.setSelected(buttonIsSelected);
-        _backgroundMusicButtonInPlayer.setSelected(buttonIsSelected);
+        updateButtonTexts();
+        setButtonsSelected();
 
         _videoPlayerPane.getChildren().removeAll();
 
-        _videoTitle.setText("  Now Playing: " + ListCreationsController.getSelectedCreationName());
-        Media video = new Media(ListCreationsController.getSelectedFile().toURI().toString());
-        _mediaPlayer = new MediaPlayer(video);
-        _mediaPlayer.setAutoPlay(true);
+        ListCreationsController listCreationsController = (ListCreationsController) Scenes.LIST_CREATIONS_SCENE.getController();
+        _videoTitle.setText("  Now Playing: " + listCreationsController.getSelectedCreationName());
 
-        _mediaView.setMediaPlayer(_mediaPlayer);
+        MediaPlayer mediaPlayer = _videoPlayer.createMediaPlayer(listCreationsController.getSelectedFile());
+        _mediaView.setMediaPlayer(mediaPlayer);
 
         //Once the video is finished the user will return to the main menu.
-        _mediaPlayer.setOnEndOfMedia(new Runnable() {
-            public void run() {
-                _returnButton.fire();
-            }
-        });
+        mediaPlayer.setOnEndOfMedia(() -> _returnButton.fire());
     }
 
     @FXML
     private void handlePausePlayButton() {
-        if (_mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
-            _mediaPlayer.pause();
-            _pausePlayButton.setText("\u25B6");
-        } else {
-            _mediaPlayer.play();
-            _pausePlayButton.setText("| |");
-        }
+        _videoPlayer.pausePlayMedia();
+        _pausePlayButton.setText(_videoPlayer.getButtonText());
     }
 
     // for muting the audio of the video
     // Video will continue to play
     @FXML
     private void handleMuteButton() {
-        _mediaPlayer.setMute(!_mediaPlayer.isMute());
+        _videoPlayer.toggleMute();
     }
 
     // Will skip forwards 3 seconds in the video time.
     @FXML
     private void handleForwardButton() {
-        changeVideoTime(3);
+        _videoPlayer.changeVideoTime(3);
     }
 
     // Will skip back 3 seconds in the video time.
     @FXML
     private void handleBackwardsButton() {
-        changeVideoTime(-3);
-    }
-
-    private void changeVideoTime(int secondsToAdd) {
-        _mediaPlayer.seek(_mediaPlayer.getCurrentTime().add(Duration.seconds(secondsToAdd)));
+        _videoPlayer.changeVideoTime(-3);
     }
 
     // Return to main menu
     @FXML
-    private void handleReturnButton() throws IOException {
-        _mediaPlayer.stop();
-        _mediaPlayer.dispose();
-        Main.changeScene("resources/ListCreationsScene.fxml");
+    private void handleReturnButton() {
+        _videoPlayer.stopMediaPlayer();
+        _videoPlayer.disposeMediaPlayer();
+        Scenes.changeScene(Scenes.LIST_CREATIONS_SCENE);
     }
 
     @FXML
     private void handleBackgroundMusic() {
         boolean buttonIsSelected = _backgroundMusicButton.isSelected();
-        Main.backgroundMusicPlayer().handleBackgroundMusic(buttonIsSelected);
+        _backgroundMusicPlayer.handleBackgroundMusic(buttonIsSelected);
         _backgroundMusicButtonInPlayer.setSelected(buttonIsSelected);
         updateButtonTexts();
     }
@@ -118,14 +101,20 @@ public class PlayerController {
     @FXML
     private void handleBackgroundMusicInPlayer() {
         boolean buttonIsSelected = _backgroundMusicButtonInPlayer.isSelected();
-        Main.backgroundMusicPlayer().handleBackgroundMusic(buttonIsSelected);
+        _backgroundMusicPlayer.handleBackgroundMusic(buttonIsSelected);
         _backgroundMusicButton.setSelected(buttonIsSelected);
         updateButtonTexts();
     }
 
     private void updateButtonTexts() {
-        String buttonText = Main.backgroundMusicPlayer().getButtonText();
+        String buttonText = _backgroundMusicPlayer.getButtonText();
         _backgroundMusicButton.setText(buttonText);
         _backgroundMusicButtonInPlayer.setText(buttonText);
+    }
+
+    private void setButtonsSelected() {
+        boolean buttonIsSelected = _backgroundMusicPlayer.getButtonIsSelected();
+        _backgroundMusicButton.setSelected(buttonIsSelected);
+        _backgroundMusicButtonInPlayer.setSelected(buttonIsSelected);
     }
 }

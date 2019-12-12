@@ -1,5 +1,6 @@
 package application.tasks;
 
+import application.logic.Folders;
 import com.flickr4java.flickr.Flickr;
 import com.flickr4java.flickr.FlickrException;
 import com.flickr4java.flickr.REST;
@@ -19,7 +20,7 @@ public class FlickrImagesTask extends Task<Void> {
     }
 
     @Override
-    protected Void call() throws Exception {
+    protected Void call() {
         getFlickrImages();
         updateProgress(0, 10);
         return null;
@@ -47,9 +48,9 @@ public class FlickrImagesTask extends Task<Void> {
 
             PhotoList<Photo> results = photos.search(params, resultsPerPage, page);
 
-            File outputfile = new File(System.getProperty("user.dir") + "/creations/" + _searchTerm);
-            if (!outputfile.exists()) {
-                outputfile.mkdirs();
+            File outputFile = new File(Folders.CREATIONS.asString() + _searchTerm);
+            if (!outputFile.exists()) {
+                outputFile.mkdirs();
             }
 
             int count = 0;
@@ -59,8 +60,8 @@ public class FlickrImagesTask extends Task<Void> {
 
                     String filename = ("" + count + ".jpg");
 
-                    File imagefile = new File(System.getProperty("user.dir") + "/creations/" + _searchTerm + "/" + filename);
-                    ImageIO.write(image, "jpg", imagefile);
+                    File imageFile = new File(Folders.CREATIONS.asString() + _searchTerm + "/" + filename);
+                    ImageIO.write(image, "jpg", imageFile);
                     count++;
                 } catch (FlickrException fe) {
                     System.err.println("Ignoring image " + photo.getId() + ": " + fe.getMessage());

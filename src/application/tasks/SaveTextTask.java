@@ -1,9 +1,11 @@
 package application.tasks;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
+import application.logic.Folders;
 import javafx.concurrent.Task;
 
 public class SaveTextTask extends Task<String> {
@@ -16,7 +18,7 @@ public class SaveTextTask extends Task<String> {
     }
 
     @Override
-    protected String call() throws Exception {
+    protected String call() {
         String creationName = null;
         try {
             String voice = null;
@@ -43,7 +45,7 @@ public class SaveTextTask extends Task<String> {
                 }
                 creationName += i + ".wav";
 
-                creationDir = new File(System.getProperty("user.dir") + "/chunks/" + creationName);
+                creationDir = new File(Folders.CHUNKS.asString() + creationName);
 
                 i++;
             } while (creationDir.exists());
@@ -58,7 +60,7 @@ public class SaveTextTask extends Task<String> {
             stdin.close();
 
             process.waitFor();
-        } catch (Exception e) {
+        } catch (InterruptedException | IOException e) {
             e.printStackTrace();
         }
         return creationName;

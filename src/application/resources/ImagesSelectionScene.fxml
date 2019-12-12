@@ -35,26 +35,26 @@
       </ImageView>
       <Pane fx:id="_imagePane" layoutX="62.0" layoutY="246.0" prefHeight="466.0" prefWidth="900.0" style="-fx-background-radius: 25; -fx-border-radius: 25; -fx-background-color: WHITE;" visible="false">
          <children>
-            <ImageView fx:id="_ImageView0" fitHeight="100.0" fitWidth="150.0" layoutX="28.0" layoutY="85.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="_ImageView1" fitHeight="100.0" fitWidth="150.0" layoutX="196.0" layoutY="85.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="_ImageView2" fitHeight="100.0" fitWidth="150.0" layoutX="367.0" layoutY="85.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="_ImageView3" fitHeight="100.0" fitWidth="150.0" layoutX="537.0" layoutY="85.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="_ImageView4" fitHeight="100.0" fitWidth="150.0" layoutX="718.0" layoutY="85.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="_ImageView5" fitHeight="100.0" fitWidth="150.0" layoutX="33.0" layoutY="276.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="_ImageView6" fitHeight="100.0" fitWidth="150.0" layoutX="205.0" layoutY="276.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="_ImageView7" fitHeight="100.0" fitWidth="150.0" layoutX="379.0" layoutY="276.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="_ImageView8" fitHeight="100.0" fitWidth="150.0" layoutX="561.0" layoutY="283.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="_ImageView9" fitHeight="100.0" fitWidth="150.0" layoutX="723.0" layoutY="283.0" pickOnBounds="true" preserveRatio="true" />
-            <CheckBox fx:id="_checkBox0" layoutX="46.0" layoutY="36.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="125.0" text="Image 1" />
-            <CheckBox fx:id="_checkBox1" layoutX="217.0" layoutY="36.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="125.0" text="Image 2" />
-            <CheckBox fx:id="_checkBox2" layoutX="387.0" layoutY="36.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="125.0" text="Image 3" />
-            <CheckBox fx:id="_checkBox3" layoutX="573.0" layoutY="36.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="125.0" text="Image 4" />
-            <CheckBox fx:id="_checkBox4" layoutX="735.0" layoutY="36.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="125.0" text="Image 5" />
-            <CheckBox fx:id="_checkBox5" layoutX="46.0" layoutY="404.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="125.0" text="Image 6" />
-            <CheckBox fx:id="_checkBox6" layoutX="210.0" layoutY="404.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="125.0" text="Image 7" />
-            <CheckBox fx:id="_checkBox7" layoutX="385.0" layoutY="404.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="125.0" text="Image 8" />
-            <CheckBox fx:id="_checkBox8" layoutX="561.0" layoutY="404.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="125.0" text="Image 9" />
-            <CheckBox fx:id="_checkBox9" layoutX="736.0" layoutY="404.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="125.0" text="Image 10" />
+            <ImageView fx:id="_flickrImage0" fitHeight="100.0" fitWidth="150.0" layoutX="28.0" layoutY="85.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="_flickrImage1" fitHeight="100.0" fitWidth="150.0" layoutX="196.0" layoutY="85.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="_flickrImage2" fitHeight="100.0" fitWidth="150.0" layoutX="367.0" layoutY="85.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="_flickrImage3" fitHeight="100.0" fitWidth="150.0" layoutX="537.0" layoutY="85.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="_flickrImage4" fitHeight="100.0" fitWidth="150.0" layoutX="718.0" layoutY="85.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="_flickrImage5" fitHeight="100.0" fitWidth="150.0" layoutX="33.0" layoutY="276.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="_flickrImage6" fitHeight="100.0" fitWidth="150.0" layoutX="205.0" layoutY="276.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="_flickrImage7" fitHeight="100.0" fitWidth="150.0" layoutX="379.0" layoutY="276.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="_flickrImage8" fitHeight="100.0" fitWidth="150.0" layoutX="561.0" layoutY="283.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="_flickrImage9" fitHeight="100.0" fitWidth="150.0" layoutX="723.0" layoutY="283.0" pickOnBounds="true" preserveRatio="true" />
+            <CheckBox fx:id="_includeImage0" layoutX="46.0" layoutY="36.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="125.0" text="Image 1" />
+            <CheckBox fx:id="_includeImage1" layoutX="217.0" layoutY="36.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="125.0" text="Image 2" />
+            <CheckBox fx:id="_includeImage2" layoutX="387.0" layoutY="36.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="125.0" text="Image 3" />
+            <CheckBox fx:id="_includeImage3" layoutX="573.0" layoutY="36.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="125.0" text="Image 4" />
+            <CheckBox fx:id="_includeImage4" layoutX="735.0" layoutY="36.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="125.0" text="Image 5" />
+            <CheckBox fx:id="_includeImage5" layoutX="46.0" layoutY="404.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="125.0" text="Image 6" />
+            <CheckBox fx:id="_includeImage6" layoutX="210.0" layoutY="404.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="125.0" text="Image 7" />
+            <CheckBox fx:id="_includeImage7" layoutX="385.0" layoutY="404.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="125.0" text="Image 8" />
+            <CheckBox fx:id="_includeImage8" layoutX="561.0" layoutY="404.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="125.0" text="Image 9" />
+            <CheckBox fx:id="_includeImage9" layoutX="736.0" layoutY="404.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="125.0" text="Image 10" />
          </children>
       </Pane>
       <ToggleButton fx:id="_backgroundMusicButton" layoutX="35.0" layoutY="15.0" mnemonicParsing="false" onAction="#handleBackgroundMusic" prefHeight="50.0" prefWidth="135.0" styleClass="musicButton" text="Music: Off" />

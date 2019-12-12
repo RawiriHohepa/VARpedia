@@ -15,7 +15,7 @@ public class WikiSearchTask extends Task<String> {
     }
 
     @Override
-    protected String call() throws Exception {
+    protected String call() {
 
         String searchResult = "";
         try {
@@ -26,7 +26,7 @@ public class WikiSearchTask extends Task<String> {
             InputStream stdout = process.getInputStream();
             BufferedReader stdoutBuffered = new BufferedReader(new InputStreamReader(stdout));
 
-            String line = null;
+            String line;
             while ((line = stdoutBuffered.readLine()) != null) {
                 searchResult += line;
             }
