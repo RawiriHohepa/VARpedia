@@ -9,12 +9,12 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public enum Scenes {
-    IMAGES_SELECTION_SCENE ("ImagesSelectionScene"),
-    LIST_CREATIONS_SCENE ("ListCreationsScene"),
-    MAIN_SCREEN_SCENE ("MainScreenScene"),
-    NEW_CREATION_SCENE ("NewCreationScene"),
-    PLAYER_SCENE ("PlayerScene"),
-    QUIZ_SCENE ("QuizScene");
+    IMAGES_SELECTION("ImagesSelectionScene"),
+    LIST_CREATIONS("ListCreationsScene"),
+    MAIN_SCREEN("MainScreenScene"),
+    NEW_CREATION("NewCreationScene"),
+    PLAYER("PlayerScene"),
+    QUIZ("QuizScene");
 
     private final static String SCENES_FOLDER = "resources/";
     private static Stage _primaryStage;
@@ -30,9 +30,9 @@ public enum Scenes {
     // This method is used throughout this application to change between scenes.
     // Upon the correct button actions by the user, the scene will switch to the next scene indicated by
     // the parameter String fxmlFileName.
-    static public void changeScene(Scenes scene) {
+    public void changeTo() {
         FXMLLoader fMXLLoader = new FXMLLoader();
-        fMXLLoader.setLocation(Main.class.getResource(scene._fxmlFileName));
+        fMXLLoader.setLocation(Main.class.getResource(_fxmlFileName));
 
         Parent newLayout = null;
         try {
@@ -45,8 +45,8 @@ public enum Scenes {
         _primaryStage.setScene(newScene);
         _primaryStage.show();
 
-        scene._controller = fMXLLoader.getController();
-        _currentScene = scene;
+        _controller = fMXLLoader.getController();
+        _currentScene = this;
     }
 
     static public void setPrimaryStage(Stage primaryStage) {

@@ -53,10 +53,10 @@ public class FileManager {
         return FXCollections.observableArrayList(fileNamesList);
     }
 
-    // This method will clean the temporary fold that stored the audio chunks, the flikr images
+    // This method will clean the temporary fold that stored the audio chunks, the flickr images
     // the no audio .mp4 file the .wav file as well as the folders themselves.
     public static void cleanFolders() {
-        NewCreationController newCreationController = (NewCreationController) Scenes.NEW_CREATION_SCENE.getController();
+        NewCreationController newCreationController = (NewCreationController) Scenes.NEW_CREATION.getController();
         // The creations directory where all creations are stored.
         File creationFolder = new File(Folders.CREATIONS.asString() + newCreationController.getSearchTerm() + "/" );
         for (final File creationFileName : creationFolder.listFiles()) {

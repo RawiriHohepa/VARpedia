@@ -191,7 +191,7 @@ public class ImagesSelectionController extends Controller {
         _team.submit(flickrImagesTask);
 
         // return to main menu
-        Scenes.changeScene(Scenes.MAIN_SCREEN_SCENE);
+        Scenes.MAIN_SCREEN.changeTo();
 
         flickrImagesTask.setOnSucceeded(workerStateEvent -> {
             // close the 'in progress' popup
@@ -201,8 +201,8 @@ public class ImagesSelectionController extends Controller {
             // This will refresh the List of creations only if the user is currently on the List of creations scene
             // Otherwise when the user enters, the initialize() method of ListCreationsController will
             // refresh the list of creations.
-            if (Scenes.getCurrentScene().equals(Scenes.LIST_CREATIONS_SCENE)) {
-                Scenes.changeScene(Scenes.LIST_CREATIONS_SCENE);
+            if (Scenes.getCurrentScene().equals(Scenes.LIST_CREATIONS)) {
+                Scenes.LIST_CREATIONS.changeTo();
             }
 
             Alert creationFinishedPopup = new AlertBuilder()
@@ -262,7 +262,7 @@ public class ImagesSelectionController extends Controller {
     @FXML
     private void handleCreationCancelButton() {
         // Return to main menu
-        Scenes.changeScene(Scenes.MAIN_SCREEN_SCENE);
+        Scenes.MAIN_SCREEN.changeTo();
         FileManager.cleanFolders();
     }
 

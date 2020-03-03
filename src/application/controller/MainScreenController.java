@@ -25,12 +25,12 @@ public class MainScreenController extends Controller {
 
     @FXML
     private void handleListButton() {
-        Scenes.changeScene(Scenes.LIST_CREATIONS_SCENE);
+        Scenes.LIST_CREATIONS.changeTo();
     }
 
     @FXML
     private void handleNewCreationButton() {
-        Scenes.changeScene(Scenes.NEW_CREATION_SCENE);
+        Scenes.NEW_CREATION.changeTo();
     }
 
     @FXML
@@ -44,7 +44,7 @@ public class MainScreenController extends Controller {
                     .getResult();
             noQuizVideoAlert.showAndWait();
         } else {
-            Scenes.changeScene(Scenes.QUIZ_SCENE);
+            Scenes.QUIZ.changeTo();
         }
     }
 

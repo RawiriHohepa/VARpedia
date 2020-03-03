@@ -47,7 +47,7 @@ public class PlayerController {
 
         _videoPlayerPane.getChildren().removeAll();
 
-        ListCreationsController listCreationsController = (ListCreationsController) Scenes.LIST_CREATIONS_SCENE.getController();
+        ListCreationsController listCreationsController = (ListCreationsController) Scenes.LIST_CREATIONS.getController();
         _videoTitle.setText("  Now Playing: " + listCreationsController.getSelectedCreationName());
 
         MediaPlayer mediaPlayer = _videoPlayer.createMediaPlayer(listCreationsController.getSelectedFile());
@@ -87,7 +87,7 @@ public class PlayerController {
     private void handleReturnButton() {
         _videoPlayer.stopMediaPlayer();
         _videoPlayer.disposeMediaPlayer();
-        Scenes.changeScene(Scenes.LIST_CREATIONS_SCENE);
+        Scenes.LIST_CREATIONS.changeTo();
     }
 
     @FXML

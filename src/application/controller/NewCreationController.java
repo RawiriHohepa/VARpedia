@@ -102,7 +102,7 @@ public class NewCreationController extends Controller {
     private void handleCreationCancelButton() {
         _newCreation.cleanChunks();
         // Return to main menu
-        Scenes.changeScene(Scenes.MAIN_SCREEN_SCENE);
+        Scenes.MAIN_SCREEN.changeTo();
     }
 
     @FXML
@@ -266,7 +266,7 @@ public class NewCreationController extends Controller {
         _team.submit(combineChunksTask);
 
         combineChunksTask.setOnSucceeded(workerStateEvent -> {
-            Scenes.changeScene(Scenes.IMAGES_SELECTION_SCENE);
+            Scenes.IMAGES_SELECTION.changeTo();
         });
     }
 

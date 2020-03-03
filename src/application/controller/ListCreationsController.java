@@ -48,17 +48,17 @@ public class ListCreationsController extends Controller {
 
     @FXML
     private void handleNewCreationButton() {
-        Scenes.changeScene(Scenes.NEW_CREATION_SCENE);
+        Scenes.NEW_CREATION.changeTo();
     }
 
     @FXML
     private void handlePlayButton() {
-        Scenes.changeScene(Scenes.PLAYER_SCENE);
+        Scenes.PLAYER.changeTo();
     }
 
     @FXML
     private void handleReturnButton() {
-        Scenes.changeScene(Scenes.MAIN_SCREEN_SCENE);
+        Scenes.MAIN_SCREEN.changeTo();
     }
 
     @FXML

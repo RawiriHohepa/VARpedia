@@ -163,7 +163,7 @@ public class QuizController {
     @FXML
     private void handleBackButton() throws IOException {
         _videoPlayer.stopMediaPlayer();
-        Scenes.changeScene(Scenes.MAIN_SCREEN_SCENE);
+        Scenes.MAIN_SCREEN.changeTo();
     }
 
     @FXML
@@ -222,7 +222,7 @@ public class QuizController {
     // Return back to quiz start screen.
     @FXML
     private void handleReturnButton() throws IOException {
-        Scenes.changeScene(Scenes.QUIZ_SCENE);
+        Scenes.QUIZ.changeTo();
     }
 
     @FXML

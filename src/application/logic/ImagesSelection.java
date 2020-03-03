@@ -14,7 +14,7 @@ public class ImagesSelection {
     private File _imagesFolder;
 
     public ImagesSelection() {
-        NewCreationController newCreationController = (NewCreationController) Scenes.NEW_CREATION_SCENE.getController();
+        NewCreationController newCreationController = (NewCreationController) Scenes.NEW_CREATION.getController();
         _searchTerm = newCreationController.getSearchTerm();
         _imagesFolder = new File(Folders.CREATIONS.asString() + _searchTerm);
     }

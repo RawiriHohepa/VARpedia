@@ -35,7 +35,7 @@ public class Main extends Application {
 			quizFolder.mkdirs();
 		}
 
-		Scenes.changeScene(Scenes.MAIN_SCREEN_SCENE);
+		Scenes.MAIN_SCREEN.changeTo();
 		
 		/**
 		 * Credit to anonymous classmate from peer review
