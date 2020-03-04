@@ -67,7 +67,7 @@ public class ImagesSelectionController extends Controller {
     private CheckBox _includeImage9;
 
     @FXML
-    private ToggleButton _backgroundMusicButton;
+    private Button _backgroundMusicButton;
 
     @FXML
     private ProgressBar _imagesProgressBar;
@@ -100,8 +100,7 @@ public class ImagesSelectionController extends Controller {
         _clockImage.setVisible(true);
         _progressPane.setVisible(true);
 
-        _backgroundMusicButton.setText(_backgroundMusicPlayer.getButtonText());
-        _backgroundMusicButton.setSelected(_backgroundMusicPlayer.getButtonIsSelected());
+        _backgroundMusicButton.textProperty().bind(_backgroundMusicPlayer.getButtonTextProperty());
 
         _flickrImageViewList = new ArrayList<ImageView>(Arrays.asList(_flickrImage0, _flickrImage1, _flickrImage2, _flickrImage3, _flickrImage4, _flickrImage5
                 , _flickrImage6, _flickrImage7, _flickrImage8, _flickrImage9));
@@ -268,7 +267,6 @@ public class ImagesSelectionController extends Controller {
 
     @FXML
     private void handleBackgroundMusic() {
-        _backgroundMusicPlayer.handleBackgroundMusic(_backgroundMusicButton.isSelected());
-        _backgroundMusicButton.setText(_backgroundMusicPlayer.getButtonText());
+        _backgroundMusicPlayer.toggleBackgroundMusic();
     }
 }

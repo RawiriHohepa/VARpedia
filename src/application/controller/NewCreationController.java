@@ -29,7 +29,7 @@ import java.util.concurrent.ExecutorService;
 
 public class NewCreationController extends Controller {
     @FXML
-    private ToggleButton _backgroundMusicButton;
+    private Button _backgroundMusicButton;
     @FXML
     private Label _enterSearchTerm;
     @FXML
@@ -88,8 +88,7 @@ public class NewCreationController extends Controller {
 
         _searchImage.setVisible(true);
 
-        _backgroundMusicButton.setText(_backgroundMusicPlayer.getButtonText());
-        _backgroundMusicButton.setSelected(_backgroundMusicPlayer.getButtonIsSelected());
+        _backgroundMusicButton.textProperty().bind(_backgroundMusicPlayer.getButtonTextProperty());
 
         setUpBooleanBindings();
 
@@ -372,8 +371,7 @@ public class NewCreationController extends Controller {
 
     @FXML
     private void handleBackgroundMusic() {
-        _backgroundMusicPlayer.handleBackgroundMusic(_backgroundMusicButton.isSelected());
-        _backgroundMusicButton.setText(_backgroundMusicPlayer.getButtonText());
+        _backgroundMusicPlayer.toggleBackgroundMusic();
     }
 
     public String getSearchTerm() {

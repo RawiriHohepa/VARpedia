@@ -17,13 +17,13 @@ import javafx.util.Duration;
 import java.io.IOException;
 import java.util.Optional;
 
-public class QuizController {
+public class QuizController extends Controller {
     @FXML
     MediaView _mediaView;
     @FXML
-    private ToggleButton _backgroundMusicButton;
+    private Button _backgroundMusicButton;
     @FXML
-    private ToggleButton _backgroundMusicButtonInPlayer;
+    private Button _backgroundMusicButtonInPlayer;
     @FXML
     private Pane _quizPlayer;
     @FXML
@@ -73,8 +73,8 @@ public class QuizController {
         BooleanBinding noCreationSelected = _listOfQuiz.getSelectionModel().selectedItemProperty().isNull();
         _deleteButton.disableProperty().bind(noCreationSelected);
 
-        updateButtonTexts();
-        setButtonsSelected();
+        _backgroundMusicButton.textProperty().bind(_backgroundMusicPlayer.getButtonTextProperty());
+        _backgroundMusicButtonInPlayer.textProperty().bind(_backgroundMusicPlayer.getButtonTextProperty());
 
         _startButton.setVisible(true);
         _manageQuizButton.setVisible(true);
@@ -227,29 +227,6 @@ public class QuizController {
 
     @FXML
     private void handleBackgroundMusic() {
-        boolean buttonIsSelected = _backgroundMusicButton.isSelected();
-        _backgroundMusicPlayer.handleBackgroundMusic(buttonIsSelected);
-        _backgroundMusicButtonInPlayer.setSelected(buttonIsSelected);
-        updateButtonTexts();
-    }
-
-    @FXML
-    private void handleBackgroundMusicInPlayer() {
-        boolean buttonIsSelected = _backgroundMusicButtonInPlayer.isSelected();
-        _backgroundMusicPlayer.handleBackgroundMusic(buttonIsSelected);
-        _backgroundMusicButton.setSelected(buttonIsSelected);
-        updateButtonTexts();
-    }
-
-    private void updateButtonTexts() {
-        String buttonText = _backgroundMusicPlayer.getButtonText();
-        _backgroundMusicButton.setText(buttonText);
-        _backgroundMusicButtonInPlayer.setText(buttonText);
-    }
-
-    private void setButtonsSelected() {
-        boolean buttonIsSelected = _backgroundMusicPlayer.getButtonIsSelected();
-        _backgroundMusicButton.setSelected(buttonIsSelected);
-        _backgroundMusicButtonInPlayer.setSelected(buttonIsSelected);
+        _backgroundMusicPlayer.toggleBackgroundMusic();
     }
 }

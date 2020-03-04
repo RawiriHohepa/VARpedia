@@ -15,7 +15,7 @@ import java.util.Optional;
 
 public class ListCreationsController extends Controller {
     @FXML
-    private ToggleButton _backgroundMusicButton;
+    private Button _backgroundMusicButton;
 
     @FXML
     private ListView<String> _listViewCreations;
@@ -35,8 +35,7 @@ public class ListCreationsController extends Controller {
         _backgroundMusicPlayer = Main.getBackgroundMusicPlayer();
         _fileManager = new FileManager(Folders.CREATIONS);
 
-        _backgroundMusicButton.setText(_backgroundMusicPlayer.getButtonText());
-        _backgroundMusicButton.setSelected(_backgroundMusicPlayer.getButtonIsSelected());
+        _backgroundMusicButton.textProperty().bind(_backgroundMusicPlayer.getButtonTextProperty());
 
         // Disable the buttons whenever there is no creation selected
         BooleanBinding noCreationSelected = _listViewCreations.getSelectionModel().selectedItemProperty().isNull();
@@ -106,7 +105,6 @@ public class ListCreationsController extends Controller {
 
     @FXML
     private void handleBackgroundMusic() {
-        _backgroundMusicPlayer.handleBackgroundMusic(_backgroundMusicButton.isSelected());
-        _backgroundMusicButton.setText(_backgroundMusicPlayer.getButtonText());
+        _backgroundMusicPlayer.toggleBackgroundMusic();
     }
 }

@@ -65,7 +65,7 @@
             <Text fx:id="_searchInProgress" layoutX="25.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="infoText" text="Searching, please wait..." textAlignment="CENTER" visible="false" wrappingWidth="350.0" />
          </children>
       </Pane>
-      <ToggleButton fx:id="_backgroundMusicButton" layoutX="35.0" layoutY="15.0" mnemonicParsing="false" onAction="#handleBackgroundMusic" prefHeight="50.0" prefWidth="135.0" styleClass="musicButton" text="Music: Off" />
+      <Button fx:id="_backgroundMusicButton" layoutX="35.0" layoutY="15.0" mnemonicParsing="false" onAction="#handleBackgroundMusic" prefHeight="50.0" prefWidth="135.0" styleClass="musicButton" text="Music: Off" />
 
 
 

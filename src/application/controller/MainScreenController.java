@@ -7,11 +7,11 @@ import application.logic.AlertBuilder;
 import application.logic.Folders;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.Button;
 
 public class MainScreenController extends Controller {
     @FXML
-    private ToggleButton _backgroundMusicButton;
+    private Button _backgroundMusicButton;
 
     private BackgroundMusicPlayer _backgroundMusicPlayer;
 
@@ -19,8 +19,7 @@ public class MainScreenController extends Controller {
     public void initialize() {
         _backgroundMusicPlayer = Main.getBackgroundMusicPlayer();
 
-        _backgroundMusicButton.setText(_backgroundMusicPlayer.getButtonText());
-        _backgroundMusicButton.setSelected(_backgroundMusicPlayer.getButtonIsSelected());
+        _backgroundMusicButton.textProperty().bind(_backgroundMusicPlayer.getButtonTextProperty());
     }
 
     @FXML
@@ -50,8 +49,7 @@ public class MainScreenController extends Controller {
 
     @FXML
     private void handleBackgroundMusic() {
-        _backgroundMusicPlayer.handleBackgroundMusic(_backgroundMusicButton.isSelected());
-        _backgroundMusicButton.setText(_backgroundMusicPlayer.getButtonText());
+        _backgroundMusicPlayer.toggleBackgroundMusic();
     }
 
     @FXML

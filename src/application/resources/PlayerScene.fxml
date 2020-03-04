@@ -18,7 +18,7 @@
             <Button layoutX="302.0" layoutY="471.0" mnemonicParsing="false" onAction="#handleBackwardsButton" prefHeight="50.0" prefWidth="75.0" style="-fx-border-color: blue; -fx-border-width: 1;" styleClass="smallButton" text="&lt;&lt;" />
             <Button layoutX="33.0" layoutY="471.0" mnemonicParsing="false" onAction="#handleMuteButton" prefHeight="50.0" prefWidth="100.0" style="-fx-border-color: blue; -fx-border-width: 1;" styleClass="smallButton" text="Mute" />
             <MediaView fx:id="_mediaView" fitHeight="400.0" fitWidth="600.0" layoutX="61.0" layoutY="28.0" />
-            <ToggleButton fx:id="_backgroundMusicButtonInPlayer" layoutX="680.0" layoutY="471.0" mnemonicParsing="false" onAction="#handleBackgroundMusicInPlayer" prefHeight="50.0" prefWidth="135.0" styleClass="musicButton" text="Music: Off" />
+            <Button fx:id="_backgroundMusicButtonInPlayer" layoutX="680.0" layoutY="471.0" mnemonicParsing="false" onAction="#handleBackgroundMusic" prefHeight="50.0" prefWidth="135.0" styleClass="musicButton" text="Music: Off" />
          </children>
       </Pane>
       <Label fx:id="_videoTitle" layoutX="88.0" layoutY="102.0" prefHeight="78.0" prefWidth="849.0" style="-fx-background-radius: 25 25 0 0; -fx-border-radius: 25 25 0 0; -fx-background-color: YELLOW; -fx-border-color: WHITE;" text="   Now Playing: " textAlignment="CENTER">
@@ -26,6 +26,6 @@
             <Font size="41.0" />
          </font>
       </Label>
-      <ToggleButton fx:id="_backgroundMusicButton" layoutX="35.0" layoutY="15.0" mnemonicParsing="false" onAction="#handleBackgroundMusic" prefHeight="50.0" prefWidth="135.0" styleClass="musicButton" text="Music: Off" />
+      <Button fx:id="_backgroundMusicButton" layoutX="35.0" layoutY="15.0" mnemonicParsing="false" onAction="#handleBackgroundMusic" prefHeight="50.0" prefWidth="135.0" styleClass="musicButton" text="Music: Off" />
    </children>
 </AnchorPane>
