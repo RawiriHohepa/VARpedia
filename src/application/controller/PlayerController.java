@@ -1,13 +1,11 @@
 package application.controller;
 
 import application.BackgroundMusicPlayer;
-import application.Main;
 import application.Scenes;
-import application.logic.*;
+import application.logic.VideoPlayer;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
@@ -38,7 +36,7 @@ public class PlayerController extends Controller {
 
     @FXML
     public void initialize() {
-        _backgroundMusicPlayer = Main.getBackgroundMusicPlayer();
+        _backgroundMusicPlayer = BackgroundMusicPlayer.getInstance();
         _videoPlayer = new VideoPlayer();
 
         _backgroundMusicButton.textProperty().bind(_backgroundMusicPlayer.getButtonTextProperty());

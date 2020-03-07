@@ -1,21 +1,21 @@
 package application.controller;
 
 import application.BackgroundMusicPlayer;
+import application.Main;
 import application.Scenes;
 import application.logic.AlertBuilder;
 import application.logic.FileManager;
 import application.logic.ImagesSelection;
 import application.tasks.FlickrImagesTask;
-import application.Main;
 import application.tasks.ImageVideoTask;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
-import javafx.scene.image.Image;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -89,13 +89,13 @@ public class ImagesSelectionController extends Controller {
 
     private ImagesSelection _imagesSelection;
     private BackgroundMusicPlayer _backgroundMusicPlayer;
-    private ExecutorService _team;
+    private ExecutorService _executorService;
 
     @FXML
     private void initialize() {
         _imagesSelection = new ImagesSelection();
-        _backgroundMusicPlayer = Main.getBackgroundMusicPlayer();
-        _team = Main.getTeam();
+        _backgroundMusicPlayer = BackgroundMusicPlayer.getInstance();
+        _executorService = Main.getExecutorService();
 
         _clockImage.setVisible(true);
         _progressPane.setVisible(true);
@@ -187,7 +187,7 @@ public class ImagesSelectionController extends Controller {
 
         // Thread to ensure that GUI remains concurrent while the video is being created
         ImageVideoTask flickrImagesTask = new ImageVideoTask(_imagesSelection.getSearchTerm(), creationName, numberOfImages);
-        _team.submit(flickrImagesTask);
+        _executorService.submit(flickrImagesTask);
 
         // return to main menu
         Scenes.MAIN_SCREEN.changeTo();
@@ -221,7 +221,7 @@ public class ImagesSelectionController extends Controller {
 
         _imagesProgressBar.progressProperty().bind(imagesTask.progressProperty());
 
-        _team.submit(imagesTask);
+        _executorService.submit(imagesTask);
         imagesTask.setOnSucceeded(workerStateEvent -> {
             _progressPane.setVisible(false);
             _imageDownloadInProgress.setVisible(false);

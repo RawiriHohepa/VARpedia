@@ -1,9 +1,9 @@
 package application.tasks;
 
+import javafx.concurrent.Task;
+
 import java.io.OutputStream;
 import java.io.PrintWriter;
-
-import javafx.concurrent.Task;
 
 public class PreviewTextTask extends Task<Void> {
     private String _chunk;

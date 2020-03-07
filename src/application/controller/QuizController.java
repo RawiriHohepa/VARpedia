@@ -1,7 +1,6 @@
 package application.controller;
 
 import application.BackgroundMusicPlayer;
-import application.Main;
 import application.Scenes;
 import application.logic.*;
 import javafx.beans.binding.Bindings;
@@ -63,7 +62,7 @@ public class QuizController extends Controller {
     @FXML
     public void initialize() {
         _quiz = new Quiz();
-        _backgroundMusicPlayer = Main.getBackgroundMusicPlayer();
+        _backgroundMusicPlayer = BackgroundMusicPlayer.getInstance();
         _videoPlayer = new VideoPlayer();
         _fileManager = new FileManager(Folders.QUIZ);
 

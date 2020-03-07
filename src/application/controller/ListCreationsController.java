@@ -1,7 +1,6 @@
 package application.controller;
 
 import application.BackgroundMusicPlayer;
-import application.Main;
 import application.Scenes;
 import application.logic.AlertBuilder;
 import application.logic.ListCreations;
@@ -31,7 +30,7 @@ public class ListCreationsController extends Controller {
 
     @FXML
     public void initialize() {
-        _backgroundMusicPlayer = Main.getBackgroundMusicPlayer();
+        _backgroundMusicPlayer = BackgroundMusicPlayer.getInstance();
         _listCreations = new ListCreations();
 
         _backgroundMusicButton.textProperty().bind(_backgroundMusicPlayer.getButtonTextProperty());

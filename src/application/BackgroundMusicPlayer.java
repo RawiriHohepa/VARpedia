@@ -1,7 +1,5 @@
 package application;
 
-import java.io.File;
-
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -10,14 +8,18 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
+import java.io.File;
+
 public class BackgroundMusicPlayer {
+    private static BackgroundMusicPlayer _instance;
+
     private final File BACKGROUND_MUSIC_DIR;
     private MediaPlayer _mediaPlayer;
 
     private BooleanProperty _isPlayingProperty;
     private StringProperty _buttonTextProperty;
 
-    public BackgroundMusicPlayer() {
+    private BackgroundMusicPlayer() {
         BACKGROUND_MUSIC_DIR = new File(System.getProperty("user.dir") + "/music/" + "khalafnasirs_Magicy_World.mp3");
 
         _isPlayingProperty = new SimpleBooleanProperty(false);
@@ -30,7 +32,7 @@ public class BackgroundMusicPlayer {
         createMediaPlayer();
     }
 
-    public void createMediaPlayer() {
+    private void createMediaPlayer() {
         Media video = new Media(BACKGROUND_MUSIC_DIR.toURI().toString());
         _mediaPlayer = new MediaPlayer(video);
 
@@ -46,6 +48,14 @@ public class BackgroundMusicPlayer {
             _mediaPlayer.pause();
             _isPlayingProperty.setValue(false);
         }
+    }
+
+    public static BackgroundMusicPlayer getInstance() {
+        if (_instance == null) {
+            _instance = new BackgroundMusicPlayer();
+        }
+
+        return _instance;
     }
 
     public StringProperty getButtonTextProperty() {

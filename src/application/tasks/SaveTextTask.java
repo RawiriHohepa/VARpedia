@@ -1,12 +1,12 @@
 package application.tasks;
 
+import application.logic.Folders;
+import javafx.concurrent.Task;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-
-import application.logic.Folders;
-import javafx.concurrent.Task;
 
 public class SaveTextTask extends Task<String> {
     private String _voiceChoice;

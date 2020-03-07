@@ -1,7 +1,6 @@
 package application.controller;
 
 import application.BackgroundMusicPlayer;
-import application.Main;
 import application.Scenes;
 import application.logic.AlertBuilder;
 import application.logic.Folders;
@@ -17,7 +16,7 @@ public class MainScreenController extends Controller {
 
     @FXML
     public void initialize() {
-        _backgroundMusicPlayer = Main.getBackgroundMusicPlayer();
+        _backgroundMusicPlayer = BackgroundMusicPlayer.getInstance();
 
         _backgroundMusicButton.textProperty().bind(_backgroundMusicPlayer.getButtonTextProperty());
     }

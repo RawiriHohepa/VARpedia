@@ -9,8 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import application.Main;
-
 public class ImageVideoTask extends Task<Void> {
     private String _searchTerm;
     private String _creationName;

@@ -1,10 +1,10 @@
 package application.tasks;
 
+import javafx.concurrent.Task;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-
-import javafx.concurrent.Task;
 
 public class WikiSearchTask extends Task<String> {
 

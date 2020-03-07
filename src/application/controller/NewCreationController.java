@@ -1,19 +1,19 @@
 package application.controller;
 
 import application.BackgroundMusicPlayer;
+import application.Main;
 import application.Scenes;
 import application.logic.AlertBuilder;
 import application.logic.Folders;
 import application.logic.NewCreation;
 import application.tasks.CombineChunksTask;
-import application.Main;
+import application.tasks.PreviewTextTask;
+import application.tasks.SaveTextTask;
 import application.tasks.WikiSearchTask;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import application.tasks.PreviewTextTask;
-import application.tasks.SaveTextTask;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
@@ -74,15 +74,15 @@ public class NewCreationController extends Controller {
 
     private BackgroundMusicPlayer _backgroundMusicPlayer;
     private NewCreation _newCreation;
-    private ExecutorService _team;
+    private ExecutorService _executorService;
 
     private static final String NO_CHUNKS_FOUND_TEXT = "No Chunks Found.";
 
     @FXML
     private void initialize() {
-        _backgroundMusicPlayer = Main.getBackgroundMusicPlayer();
+        _backgroundMusicPlayer = BackgroundMusicPlayer.getInstance();
         _newCreation = new NewCreation();
-        _team = Main.getTeam();
+        _executorService = Main.getExecutorService();
 
         _newCreation.cleanChunks();
 
@@ -118,7 +118,7 @@ public class NewCreationController extends Controller {
         WikiSearchTask wikiSearchTask = new WikiSearchTask(_newCreation.getSearchTerm());
         _wikiProgressBar.progressProperty().bind(wikiSearchTask.progressProperty());
 
-        _team.submit(wikiSearchTask);
+        _executorService.submit(wikiSearchTask);
 
         // Using concurrency allows the user to cancel the creation if the search takes too long
         wikiSearchTask.setOnSucceeded(workerStateEvent -> {
@@ -160,7 +160,7 @@ public class NewCreationController extends Controller {
         if (isValidChunk(chunk)) {
             // Run bash script using festival tts to speak the selected text to the user
             PreviewTextTask previewTextTask = new PreviewTextTask(chunk);
-            _team.submit(previewTextTask);
+            _executorService.submit(previewTextTask);
         }
     }
 
@@ -175,7 +175,7 @@ public class NewCreationController extends Controller {
             // Run bash script using festival to save a .wav file containing the spoken selected text
 
             SaveTextTask saveTextTask = new SaveTextTask(voiceChoice, chunk);
-            _team.submit(saveTextTask);
+            _executorService.submit(saveTextTask);
 
             saveTextTask.setOnSucceeded(workerStateEvent -> {
                 // Make the new chunk visible to the user
@@ -262,7 +262,7 @@ public class NewCreationController extends Controller {
 
         // Run bash script to create a combined audio of each selected chunk
         CombineChunksTask combineChunksTask = new CombineChunksTask(chunksList, _newCreation.getSearchTerm());
-        _team.submit(combineChunksTask);
+        _executorService.submit(combineChunksTask);
 
         combineChunksTask.setOnSucceeded(workerStateEvent -> {
             Scenes.IMAGES_SELECTION.changeTo();
