@@ -1,13 +1,15 @@
-package application.logic;
+package application.models;
+
+import application.logic.Folders;
 
 import java.io.File;
 import java.util.*;
 
-public class Quiz {
+public class QuizModel {
     private int _currentScore;
     private String _quizTerm;
 
-    public Quiz() {
+    public QuizModel() {
         _currentScore = 0;
     }
 

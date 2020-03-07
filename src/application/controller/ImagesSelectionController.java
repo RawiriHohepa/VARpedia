@@ -5,7 +5,7 @@ import application.Main;
 import application.Scenes;
 import application.logic.AlertBuilder;
 import application.logic.FileManager;
-import application.logic.ImagesSelection;
+import application.models.ImagesSelectionModel;
 import application.tasks.FlickrImagesTask;
 import application.tasks.ImageVideoTask;
 import javafx.beans.binding.Bindings;
@@ -87,13 +87,13 @@ public class ImagesSelectionController extends Controller {
     private List<ImageView> _flickrImageViewList;
     private List<CheckBox> _checkBoxIncludeImageList;
 
-    private ImagesSelection _imagesSelection;
+    private ImagesSelectionModel _model;
     private BackgroundMusicPlayer _backgroundMusicPlayer;
     private ExecutorService _executorService;
 
     @FXML
     private void initialize() {
-        _imagesSelection = new ImagesSelection();
+        _model = new ImagesSelectionModel();
         _backgroundMusicPlayer = BackgroundMusicPlayer.getInstance();
         _executorService = Main.getExecutorService();
 
@@ -125,7 +125,7 @@ public class ImagesSelectionController extends Controller {
         int numImagesDeleted = 0;
         for (int i = 0; i < _checkBoxIncludeImageList.size(); i++) {
             if (!_checkBoxIncludeImageList.get(i).isSelected()) {
-                new File(_imagesSelection.getImagesFolder() + "/" + i + ".jpg").delete();
+                new File(_model.getImagesFolder() + "/" + i + ".jpg").delete();
                 numImagesDeleted++;
             }
         }
@@ -152,7 +152,7 @@ public class ImagesSelectionController extends Controller {
                     .setContentText("Please enter a valid creation name consisting of alphabet letters, digits, underscores, and hyphens only.")
                     .getResult();
             invalidCreationNameError.showAndWait();
-        } else if (!_imagesSelection.isUniqueCreationName(creationName)) {
+        } else if (!_model.isUniqueCreationName(creationName)) {
             Alert overrideExistingCreationPopup = new AlertBuilder()
                     .setAlertType(Alert.AlertType.CONFIRMATION)
                     .setTitle("Override")
@@ -163,7 +163,7 @@ public class ImagesSelectionController extends Controller {
 
             // Override existing file name i.e. delete current file and create new file
             if (buttonClicked.isPresent() && buttonClicked.get() == ButtonType.OK) {
-                _imagesSelection.deleteExistingFile(creationName);
+                _model.deleteExistingFile(creationName);
 
                 createVideo(creationName, numberOfImages);
             }
@@ -186,7 +186,7 @@ public class ImagesSelectionController extends Controller {
         creationInProgressPopup.show();
 
         // Thread to ensure that GUI remains concurrent while the video is being created
-        ImageVideoTask flickrImagesTask = new ImageVideoTask(_imagesSelection.getSearchTerm(), creationName, numberOfImages);
+        ImageVideoTask flickrImagesTask = new ImageVideoTask(_model.getSearchTerm(), creationName, numberOfImages);
         _executorService.submit(flickrImagesTask);
 
         // return to main menu
@@ -217,7 +217,7 @@ public class ImagesSelectionController extends Controller {
     // Method for retrieving Flickr images. The retrieval is done through a bash process
     // in the task class FlickrImagesTask.
     private void downloadFlickrImages() {
-        FlickrImagesTask imagesTask = new FlickrImagesTask(_imagesSelection.getSearchTerm());
+        FlickrImagesTask imagesTask = new FlickrImagesTask(_model.getSearchTerm());
 
         _imagesProgressBar.progressProperty().bind(imagesTask.progressProperty());
 
@@ -233,7 +233,7 @@ public class ImagesSelectionController extends Controller {
     }
 
     private void populateFlickrImageViews() {
-        List<Image> imageList = _imagesSelection.getImageList();
+        List<Image> imageList = _model.getImageList();
 
         for (int i = 0; i < _flickrImageViewList.size(); i++) {
             _flickrImageViewList.get(i).setImage(imageList.get(i));
@@ -251,7 +251,7 @@ public class ImagesSelectionController extends Controller {
 
         // By default creation name is search term. If the search
         // term is already associated with another creation it is serialized.
-        _creationNameTextField.setText(_imagesSelection.getDefaultCreationName());
+        _creationNameTextField.setText(_model.getDefaultCreationName());
 
         _creationNameTextField.setVisible(true);
         _submitButton.setVisible(true);

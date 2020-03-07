@@ -1,14 +1,16 @@
-package application.logic;
+package application.models;
+
+import application.logic.Folders;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NewCreation {
+public class NewCreationModel {
     private static String _searchTerm;
     private String _selectedChunk;
 
-    public NewCreation() {
+    public NewCreationModel() {
         _selectedChunk = null;
     }
 

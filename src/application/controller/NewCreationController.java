@@ -5,7 +5,7 @@ import application.Main;
 import application.Scenes;
 import application.logic.AlertBuilder;
 import application.logic.Folders;
-import application.logic.NewCreation;
+import application.models.NewCreationModel;
 import application.tasks.CombineChunksTask;
 import application.tasks.PreviewTextTask;
 import application.tasks.SaveTextTask;
@@ -73,7 +73,7 @@ public class NewCreationController extends Controller {
     private ProgressBar _wikiProgressBar;
 
     private BackgroundMusicPlayer _backgroundMusicPlayer;
-    private NewCreation _newCreation;
+    private NewCreationModel _model;
     private ExecutorService _executorService;
 
     private static final String NO_CHUNKS_FOUND_TEXT = "No Chunks Found.";
@@ -81,10 +81,10 @@ public class NewCreationController extends Controller {
     @FXML
     private void initialize() {
         _backgroundMusicPlayer = BackgroundMusicPlayer.getInstance();
-        _newCreation = new NewCreation();
+        _model = new NewCreationModel();
         _executorService = Main.getExecutorService();
 
-        _newCreation.cleanChunks();
+        _model.cleanChunks();
 
         _searchImage.setVisible(true);
 
@@ -99,14 +99,14 @@ public class NewCreationController extends Controller {
 
     @FXML
     private void handleCreationCancelButton() {
-        _newCreation.cleanChunks();
+        _model.cleanChunks();
         // Return to main menu
         Scenes.MAIN_SCREEN.changeTo();
     }
 
     @FXML
     private void handleSearchWikipedia() {
-        _newCreation.setSearchTerm(_enterSearchTermTextInput.getText().trim());
+        _model.setSearchTerm(_enterSearchTermTextInput.getText().trim());
 
         _searchImage.setVisible(false);
         _progressPane.setVisible(true);
@@ -115,7 +115,7 @@ public class NewCreationController extends Controller {
         _searchInProgress.setVisible(true);
 
         // Run bash script that uses wikit and returns the result of the search
-        WikiSearchTask wikiSearchTask = new WikiSearchTask(_newCreation.getSearchTerm());
+        WikiSearchTask wikiSearchTask = new WikiSearchTask(_model.getSearchTerm());
         _wikiProgressBar.progressProperty().bind(wikiSearchTask.progressProperty());
 
         _executorService.submit(wikiSearchTask);
@@ -187,7 +187,7 @@ public class NewCreationController extends Controller {
                     _chunkList.getItems().remove(0);
                 }
 
-                if (_chunkList.getItems().size() > 1 && _newCreation.getSelectedChunk() != null) {
+                if (_chunkList.getItems().size() > 1 && _model.getSelectedChunk() != null) {
                     _moveUpButton.setDisable(false);
                     _moveDownButton.setDisable(false);
                 }
@@ -201,11 +201,11 @@ public class NewCreationController extends Controller {
     private void handleDeleteChunkButton() {
         int chunkIndex = _chunkList.getSelectionModel().getSelectedIndex();
         _chunkList.getItems().remove(chunkIndex);
-        File selectedfile = new File(Folders.CHUNKS.asString() + _newCreation.getSelectedChunk() + ".wav");
+        File selectedfile = new File(Folders.CHUNKS.asString() + _model.getSelectedChunk() + ".wav");
         selectedfile.delete();
 
         _chunkList.getSelectionModel().clearSelection();
-        _newCreation.setSelectedChunk(null);
+        _model.setSelectedChunk(null);
 
         _moveUpButton.setDisable(true);
         _moveDownButton.setDisable(true);
@@ -219,7 +219,7 @@ public class NewCreationController extends Controller {
 
     @FXML
     private void handleMoveUpButton() {
-        if (_newCreation.getSelectedChunk() != null) {
+        if (_model.getSelectedChunk() != null) {
             int selectedChunkIndex = _chunkList.getSelectionModel().getSelectedIndex();
 
             // only move up if they do not select the top-most chunk
@@ -231,7 +231,7 @@ public class NewCreationController extends Controller {
 
     @FXML
     private void handleMoveDownButton() {
-        if (_newCreation.getSelectedChunk() != null) {
+        if (_model.getSelectedChunk() != null) {
             int selectedChunkIndex = _chunkList.getSelectionModel().getSelectedIndex();
 
             // only move down if they do not select the bottom-most chunk
@@ -243,13 +243,13 @@ public class NewCreationController extends Controller {
 
     private void moveSelectedChunk(int oldIndex, int newIndex) {
         _chunkList.getItems().remove(oldIndex);
-        _chunkList.getItems().add(newIndex, _newCreation.getSelectedChunk());
+        _chunkList.getItems().add(newIndex, _model.getSelectedChunk());
         _chunkList.getSelectionModel().select(newIndex);
     }
 
     @FXML
     private void handleSelectButton() {
-        File outputFolder = new File(Folders.CREATIONS.asString() + _newCreation.getSearchTerm());
+        File outputFolder = new File(Folders.CREATIONS.asString() + _model.getSearchTerm());
         if (!outputFolder.exists()) {
             outputFolder.mkdirs();
         }
@@ -261,7 +261,7 @@ public class NewCreationController extends Controller {
         ObservableList<String> chunksList = _chunkList.getItems();
 
         // Run bash script to create a combined audio of each selected chunk
-        CombineChunksTask combineChunksTask = new CombineChunksTask(chunksList, _newCreation.getSearchTerm());
+        CombineChunksTask combineChunksTask = new CombineChunksTask(chunksList, _model.getSearchTerm());
         _executorService.submit(combineChunksTask);
 
         combineChunksTask.setOnSucceeded(workerStateEvent -> {
@@ -271,9 +271,9 @@ public class NewCreationController extends Controller {
 
     @FXML
     public void handleSelectedChunk() {
-        _newCreation.setSelectedChunk(_chunkList.getSelectionModel().getSelectedItem());
+        _model.setSelectedChunk(_chunkList.getSelectionModel().getSelectedItem());
 
-        if (_newCreation.getSelectedChunk() != null) {
+        if (_model.getSelectedChunk() != null) {
             _selectButton.setDisable(false);
 
             if (_chunkList.getItems().size() > 1) {
@@ -311,7 +311,7 @@ public class NewCreationController extends Controller {
     }
 
     private void updateChunkList() {
-        List<String> chunkNamesList = _newCreation.getChunkNamesList();
+        List<String> chunkNamesList = _model.getChunkNamesList();
 
         if (chunkNamesList.size() == 0) {
             chunkNamesList.add(NO_CHUNKS_FOUND_TEXT);
@@ -330,7 +330,7 @@ public class NewCreationController extends Controller {
     }
 
     private boolean isValidChunk(String chunk) {
-        if (_newCreation.numberOfWords(chunk) < 30) {
+        if (_model.numberOfWords(chunk) < 30) {
             return true;
         }
 
@@ -359,7 +359,7 @@ public class NewCreationController extends Controller {
 
         // Don't let the user create a chunk until they select some text
         BooleanBinding noTextSelected = Bindings.createBooleanBinding(() ->
-                        !(_newCreation.numberOfWords(_searchResultTextArea.getSelectedText().trim()) > 0),
+                        !(_model.numberOfWords(_searchResultTextArea.getSelectedText().trim()) > 0),
                 _searchResultTextArea.selectedTextProperty());
         _previewChunk.disableProperty().bind(noTextSelected);
         _saveChunk.disableProperty().bind(noTextSelected);
@@ -375,6 +375,6 @@ public class NewCreationController extends Controller {
     }
 
     public String getSearchTerm() {
-        return _newCreation.getSearchTerm();
+        return _model.getSearchTerm();
     }
 }

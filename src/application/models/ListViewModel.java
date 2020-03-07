@@ -1,6 +1,9 @@
-package application.logic;
+package application.models;
 
+import application.logic.Folders;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -9,31 +12,27 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListCreations {
-    private ObjectProperty<File> _selectedCreationProperty;
+public class ListViewModel {
+    private ObjectProperty<File> _selectedFileProperty;
     private ObjectProperty<ObservableList<File>> _currentFilesProperty;
+    private Folders _targetFolder;
 
-    public ListCreations() {
-        _selectedCreationProperty = new SimpleObjectProperty<>();
+    public ListViewModel(Folders targetFolder, ReadOnlyObjectProperty<File> selectedItemProperty) {
+        _targetFolder = targetFolder;
+        _selectedFileProperty = new SimpleObjectProperty<>();
         _currentFilesProperty = new SimpleObjectProperty<>();
-    }
 
-    public ObjectProperty<File> getSelectedCreationProperty() {
-        return _selectedCreationProperty;
+        _selectedFileProperty.bind(selectedItemProperty);
     }
 
     public void deleteSelectedFile() {
-        _selectedCreationProperty.get().delete();
+        _selectedFileProperty.get().delete();
         updateCurrentFiles();
     }
 
-    public ObjectProperty<ObservableList<File>> getCurrentFilesProperty() {
-        return _currentFilesProperty;
-    }
-
-    // This will return a list of all current creations in the creations directory.
+    // This will return a list of all current files in the target directory.
     public void updateCurrentFiles() {
-        File[] files = Folders.CREATIONS.asFolder().listFiles();
+        File[] files = _targetFolder.asFolder().listFiles();
 
         // Override each file's getName and toString methods to return its name without the file extension
         List<File> simpleNameFiles = new ArrayList<>();
@@ -53,5 +52,17 @@ public class ListCreations {
 
         // TODO research using the same observable list each time and just updating it
         _currentFilesProperty.setValue(FXCollections.observableArrayList(simpleNameFiles));
+    }
+
+    public ObjectProperty<File> getSelectedFileProperty() {
+        return _selectedFileProperty;
+    }
+
+    public ObjectProperty<ObservableList<File>> getCurrentFilesProperty() {
+        return _currentFilesProperty;
+    }
+
+    public BooleanBinding getNoFileSelectedBinding() {
+        return _selectedFileProperty.isNull();
     }
 }

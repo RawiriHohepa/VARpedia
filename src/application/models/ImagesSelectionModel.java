@@ -1,7 +1,8 @@
-package application.logic;
+package application.models;
 
 import application.Scenes;
 import application.controller.NewCreationController;
+import application.logic.Folders;
 import javafx.scene.image.Image;
 
 import java.io.File;
@@ -9,11 +10,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ImagesSelection {
+public class ImagesSelectionModel {
     private String _searchTerm;
     private File _imagesFolder;
 
-    public ImagesSelection() {
+    public ImagesSelectionModel() {
         NewCreationController newCreationController = (NewCreationController) Scenes.NEW_CREATION.getController();
         _searchTerm = newCreationController.getSearchTerm();
         _imagesFolder = new File(Folders.CREATIONS.asString() + _searchTerm);

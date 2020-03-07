@@ -3,6 +3,7 @@ package application.controller;
 import application.BackgroundMusicPlayer;
 import application.Scenes;
 import application.logic.*;
+import application.models.QuizModel;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.fxml.FXML;
@@ -54,19 +55,19 @@ public class QuizController extends Controller {
     @FXML
     private ImageView _quizImage;
 
-    private Quiz _quiz;
+    private QuizModel _model;
     private BackgroundMusicPlayer _backgroundMusicPlayer;
     private VideoPlayer _videoPlayer;
     private FileManager _fileManager;
 
     @FXML
     public void initialize() {
-        _quiz = new Quiz();
+        _model = new QuizModel();
         _backgroundMusicPlayer = BackgroundMusicPlayer.getInstance();
         _videoPlayer = new VideoPlayer();
         _fileManager = new FileManager(Folders.QUIZ);
 
-        _currentScoreText.setText("   Current Score: " + _quiz.getCurrentScore());
+        _currentScoreText.setText("   Current Score: " + _model.getCurrentScore());
         _quizPlayer.setVisible(false);
 
         BooleanBinding noCreationSelected = _listOfQuiz.getSelectionModel().selectedItemProperty().isNull();
@@ -113,7 +114,7 @@ public class QuizController extends Controller {
         _playerAnswerTextField.setVisible(true);
         _backgroundMusicButtonInPlayer.setVisible(true);
 
-        MediaPlayer quizPlayer = _videoPlayer.createMediaPlayer(_quiz.selectRandomVideo());
+        MediaPlayer quizPlayer = _videoPlayer.createMediaPlayer(_model.selectRandomVideo());
         //Once the video is finished the video will replay from the start
         quizPlayer.setOnEndOfMedia(() -> {
             quizPlayer.seek(Duration.ZERO);
@@ -132,10 +133,10 @@ public class QuizController extends Controller {
                 .setAlertType(Alert.AlertType.INFORMATION)
                 .setHeaderText(null);
 
-        if (_quiz.answerIsCorrect(_playerAnswerTextField.getText())) {
+        if (_model.answerIsCorrect(_playerAnswerTextField.getText())) {
             //updating the score when user gets answer correct
-            _quiz.incrementScore();
-            _currentScoreText.setText("   Current Score: " + _quiz.getCurrentScore());
+            _model.incrementScore();
+            _currentScoreText.setText("   Current Score: " + _model.getCurrentScore());
             _playerAnswerTextField.setText("");
 
             answerResultPopupBuilder.setTitle("Well done that was right.")
