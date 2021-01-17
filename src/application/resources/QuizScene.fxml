@@ -35,7 +35,7 @@
       <Button fx:id="_backgroundMusicButton" layoutX="35.0" layoutY="15.0" mnemonicParsing="false" onAction="#handleBackgroundMusic" prefHeight="50.0" prefWidth="135.0" styleClass="musicButton" text="Music: Off" />
       <Button fx:id="_startButton" layoutX="331.0" layoutY="535.0" mnemonicParsing="false" onAction="#handleStartButton" prefHeight="90.0" prefWidth="170.0" styleClass="homeButton" text="Start" />
       <Button fx:id="_manageQuizButton" layoutX="526.0" layoutY="535.0" mnemonicParsing="false" onAction="#handleManageQuizButton" prefHeight="90.0" prefWidth="170.0" styleClass="homeButton" text="Manage" />
-      <ListView fx:id="_listOfQuiz" layoutX="154.0" layoutY="220.0" onMouseClicked="#handleSelectedQuiz" prefHeight="396.0" prefWidth="689.0" visible="false" />
+      <ListView fx:id="_listOfQuiz" layoutX="154.0" layoutY="220.0" prefHeight="396.0" prefWidth="689.0" visible="false" />
       <Label fx:id="_selectPrompt" layoutX="154.0" layoutY="615.0" prefHeight="43.0" prefWidth="689.0" style="-fx-background-color: YELLOW; -fx-border-radius: 0 0 25 25; -fx-background-radius: 0 0 25 25; -fx-border-color: WHITE;" text="                               Please select a quiz video to continue." visible="false">
          <font>
             <Font size="24.0" />

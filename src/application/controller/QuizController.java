@@ -2,7 +2,11 @@ package application.controller;
 
 import application.BackgroundMusicPlayer;
 import application.Scenes;
-import application.logic.*;
+import application.logic.AlertBuilder;
+import application.logic.FileManager;
+import application.logic.Folders;
+import application.logic.VideoPlayer;
+import application.models.ListViewModel;
 import application.models.QuizModel;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
@@ -14,6 +18,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.util.Duration;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -39,7 +44,7 @@ public class QuizController extends Controller {
     @FXML
     private Button _manageQuizButton;
     @FXML
-    private ListView<String> _listOfQuiz;
+    private ListView<File> _listOfQuiz;
     @FXML
     private Button _deleteButton;
     @FXML
@@ -59,22 +64,34 @@ public class QuizController extends Controller {
     private BackgroundMusicPlayer _backgroundMusicPlayer;
     private VideoPlayer _videoPlayer;
     private FileManager _fileManager;
+    private ListViewModel _listViewModel;
 
     @FXML
     public void initialize() {
         _model = new QuizModel();
         _backgroundMusicPlayer = BackgroundMusicPlayer.getInstance();
-        _videoPlayer = new VideoPlayer();
-        _fileManager = new FileManager(Folders.QUIZ);
-
-        _currentScoreText.setText("   Current Score: " + _model.getCurrentScore());
-        _quizPlayer.setVisible(false);
-
-        BooleanBinding noCreationSelected = _listOfQuiz.getSelectionModel().selectedItemProperty().isNull();
-        _deleteButton.disableProperty().bind(noCreationSelected);
+        _listViewModel = new ListViewModel(Folders.QUIZ, _listOfQuiz.getSelectionModel().selectedItemProperty());
 
         _backgroundMusicButton.textProperty().bind(_backgroundMusicPlayer.getButtonTextProperty());
         _backgroundMusicButtonInPlayer.textProperty().bind(_backgroundMusicPlayer.getButtonTextProperty());
+
+        // Disable the buttons and display a prompt whenever there is no creation selected
+        BooleanBinding noQuizSelectedBinding = _listViewModel.getNoFileSelectedBinding();
+        _deleteButton.disableProperty().bind(noQuizSelectedBinding);
+
+        _listOfQuiz.itemsProperty().bind(_listViewModel.getCurrentFilesProperty());
+        _selectPrompt.textProperty().bind(_listViewModel.getSelectPromptTextProperty());
+
+        _listViewModel.updateCurrentFiles();
+
+        _currentScoreText.textProperty().bind(_model.getCurrentScoreTextProperty());
+
+
+        _videoPlayer = new VideoPlayer();
+        _fileManager = new FileManager(Folders.QUIZ);
+
+        _quizPlayer.setVisible(false);
+
 
         _startButton.setVisible(true);
         _manageQuizButton.setVisible(true);
@@ -136,7 +153,6 @@ public class QuizController extends Controller {
         if (_model.answerIsCorrect(_playerAnswerTextField.getText())) {
             //updating the score when user gets answer correct
             _model.incrementScore();
-            _currentScoreText.setText("   Current Score: " + _model.getCurrentScore());
             _playerAnswerTextField.setText("");
 
             answerResultPopupBuilder.setTitle("Well done that was right.")
@@ -161,7 +177,7 @@ public class QuizController extends Controller {
 
     // Return to main menu
     @FXML
-    private void handleBackButton() throws IOException {
+    private void handleBackButton() {
         _videoPlayer.stopMediaPlayer();
         Scenes.MAIN_SCREEN.changeTo();
     }
@@ -178,7 +194,7 @@ public class QuizController extends Controller {
         _selectPrompt.setVisible(true);
         _quizListLabel.setVisible(true);
 
-        ListCurrentQuiz();
+        _listViewModel.updateCurrentFiles();
         _backButton.setVisible(false);
         _returnButton.setVisible(true);
         _listOfQuiz.setVisible(true);
@@ -188,40 +204,24 @@ public class QuizController extends Controller {
     }
 
     @FXML
-    public void handleSelectedQuiz() {
-        String selectedQuiz = _listOfQuiz.getSelectionModel().getSelectedItem();
-        _fileManager.setSelectedFileName(selectedQuiz);
-        if (selectedQuiz != null) {
-            _selectPrompt.setText("");
-        }
-    }
-
-    private void ListCurrentQuiz() {
-        _listOfQuiz.setItems(_fileManager.getCurrentFilesList());
-    }
-
-    @FXML
     private void handleDeleteButton() {
         Alert deleteConfirmation = new AlertBuilder()
                 .setAlertType(Alert.AlertType.CONFIRMATION)
                 .setTitle("Confirm Deletion")
-                .setHeaderText("Delete " + _fileManager.getSelectedFileName() + "?")
+                .setHeaderText("Delete " + _listViewModel.getSelectedFileName() + "?")
                 .setContentText("Are you sure you want to delete this quiz?")
                 .getResult();
         Optional<ButtonType> buttonClicked = deleteConfirmation.showAndWait();
 
         if (buttonClicked.isPresent() && buttonClicked.get() == ButtonType.OK) {
-            _fileManager.deleteSelectedFile();
-            ListCurrentQuiz();
-
-            _selectPrompt.setText("                               " +
-                    "Please select a quiz video to continue.");
+            _listViewModel.deleteSelectedFile();
+            _listViewModel.updateCurrentFiles();
         }
     }
 
     // Return back to quiz start screen.
     @FXML
-    private void handleReturnButton() throws IOException {
+    private void handleReturnButton() {
         Scenes.QUIZ.changeTo();
     }
 

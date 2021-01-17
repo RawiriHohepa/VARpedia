@@ -2,9 +2,7 @@ package application.models;
 
 import application.logic.Folders;
 import javafx.beans.binding.BooleanBinding;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -15,13 +13,22 @@ import java.util.List;
 public class ListViewModel {
     private ObjectProperty<File> _selectedFileProperty;
     private ObjectProperty<ObservableList<File>> _currentFilesProperty;
+    private BooleanBinding _noFileSelectedBinding;
+    private StringProperty _selectPromptTextProperty;
     private Folders _targetFolder;
 
     public ListViewModel(Folders targetFolder, ReadOnlyObjectProperty<File> selectedItemProperty) {
-        _targetFolder = targetFolder;
         _selectedFileProperty = new SimpleObjectProperty<>();
         _currentFilesProperty = new SimpleObjectProperty<>();
+        _selectPromptTextProperty = new SimpleStringProperty();
 
+        _noFileSelectedBinding = _selectedFileProperty.isNull();
+        _noFileSelectedBinding.addListener((obs, oldValue, newValue) -> {
+            // TODO edit position of _selectPrompt so the empty space is not needed
+            _selectPromptTextProperty.setValue(newValue ? "                  Please select a video to continue." : "");
+        });
+
+        _targetFolder = targetFolder;
         _selectedFileProperty.bind(selectedItemProperty);
     }
 
@@ -54,6 +61,10 @@ public class ListViewModel {
         _currentFilesProperty.setValue(FXCollections.observableArrayList(simpleNameFiles));
     }
 
+    public String getSelectedFileName() {
+        return _selectedFileProperty.get().getName();
+    }
+
     public ObjectProperty<File> getSelectedFileProperty() {
         return _selectedFileProperty;
     }
@@ -63,6 +74,10 @@ public class ListViewModel {
     }
 
     public BooleanBinding getNoFileSelectedBinding() {
-        return _selectedFileProperty.isNull();
+        return _noFileSelectedBinding;
+    }
+
+    public StringProperty getSelectPromptTextProperty() {
+        return _selectPromptTextProperty;
     }
 }

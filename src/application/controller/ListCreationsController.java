@@ -40,12 +40,9 @@ public class ListCreationsController extends Controller {
         BooleanBinding noCreationSelectedBinding = _listViewModel.getNoFileSelectedBinding();
         _playButton.disableProperty().bind(noCreationSelectedBinding);
         _deleteButton.disableProperty().bind(noCreationSelectedBinding);
-        noCreationSelectedBinding.addListener((obs, oldValue, newValue) -> {
-            // TODO edit position of _selectPrompt so the empty space is not needed
-            _selectPrompt.setText(newValue ? "                  Please select a creation to continue." : "");
-        });
 
         _listViewCreations.itemsProperty().bind(_listViewModel.getCurrentFilesProperty());
+        _selectPrompt.textProperty().bind(_listViewModel.getSelectPromptTextProperty());
 
         _listViewModel.updateCurrentFiles();
     }
@@ -70,7 +67,7 @@ public class ListCreationsController extends Controller {
         Alert deleteConfirmation = new AlertBuilder()
                 .setAlertType(Alert.AlertType.CONFIRMATION)
                 .setTitle("Confirm Deletion")
-                .setHeaderText("Delete " + _listViewModel.getSelectedFileProperty().get().getName() + "?")
+                .setHeaderText("Delete " + _listViewModel.getSelectedFileName() + "?")
                 .setContentText("Are you sure you want to delete this creation?")
                 .getResult();
         Optional<ButtonType> buttonClicked = deleteConfirmation.showAndWait();
@@ -82,7 +79,7 @@ public class ListCreationsController extends Controller {
 
     // Used by PlayerController
     public String getSelectedCreationName() {
-        return _listViewModel.getSelectedFileProperty().get().getName();
+        return _listViewModel.getSelectedFileName();
     }
 
     // Used by PlayerController

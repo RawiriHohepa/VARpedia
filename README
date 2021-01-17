@@ -24,3 +24,7 @@ java --module-path /home/student/Downloads/openjfx-13-rc+2_linux-x64_bin-sdk/jav
 
 # Background music credit
 Magicy World by KhalafNasirs (c) copyright 2019 Licensed under a Creative Commons Attribution Noncommercial  (3.0) license. http://dig.ccmixter.org/files/khalafnasirs/59920 
+
+# Dependencies
+ffmpeg
+wikit - installing wikit requires nodejs and npm
